@@ -188,11 +188,11 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   <li><a href="#pakete-und-daten-laden" id="toc-pakete-und-daten-laden" class="nav-link active" data-scroll-target="#pakete-und-daten-laden"><span class="toc-section-number">3.1</span>  Pakete und Daten laden</a></li>
   <li><a href="#häufigkeiten-und-prozentwerte-in-den-beiden-gruppen" id="toc-häufigkeiten-und-prozentwerte-in-den-beiden-gruppen" class="nav-link" data-scroll-target="#häufigkeiten-und-prozentwerte-in-den-beiden-gruppen"><span class="toc-section-number">3.2</span>  Häufigkeiten und Prozentwerte in den beiden Gruppen</a>
   <ul class="collapse">
-  <li><a href="#chi-quadrat-test" id="toc-chi-quadrat-test" class="nav-link" data-scroll-target="#chi-quadrat-test"><span class="toc-section-number">3.2.1</span>  3. Chi-Quadrat Test</a></li>
-  <li><a href="#bivariate-korrelation" id="toc-bivariate-korrelation" class="nav-link" data-scroll-target="#bivariate-korrelation"><span class="toc-section-number">3.2.2</span>  4. Bivariate Korrelation</a></li>
-  <li><a href="#t-test" id="toc-t-test" class="nav-link" data-scroll-target="#t-test"><span class="toc-section-number">3.2.3</span>  T-Test</a></li>
-  <li><a href="#einfaktorielle-varianzanalyse-anova" id="toc-einfaktorielle-varianzanalyse-anova" class="nav-link" data-scroll-target="#einfaktorielle-varianzanalyse-anova"><span class="toc-section-number">3.2.4</span>  5. Einfaktorielle Varianzanalyse (ANOVA)</a></li>
-  <li><a href="#lineare-regression" id="toc-lineare-regression" class="nav-link" data-scroll-target="#lineare-regression"><span class="toc-section-number">3.2.5</span>  6. Lineare Regression</a></li>
+  <li><a href="#chi-quadrat-test" id="toc-chi-quadrat-test" class="nav-link" data-scroll-target="#chi-quadrat-test">3. Chi-Quadrat Test</a></li>
+  <li><a href="#bivariate-korrelation" id="toc-bivariate-korrelation" class="nav-link" data-scroll-target="#bivariate-korrelation">4. Bivariate Korrelation</a></li>
+  <li><a href="#t-test" id="toc-t-test" class="nav-link" data-scroll-target="#t-test">T-Test</a></li>
+  <li><a href="#einfaktorielle-varianzanalyse-anova" id="toc-einfaktorielle-varianzanalyse-anova" class="nav-link" data-scroll-target="#einfaktorielle-varianzanalyse-anova">5. Einfaktorielle Varianzanalyse (ANOVA)</a></li>
+  <li><a href="#lineare-regression" id="toc-lineare-regression" class="nav-link" data-scroll-target="#lineare-regression">6. Lineare Regression</a></li>
   </ul></li>
   </ul>
 </nav>
@@ -273,8 +273,8 @@ Quelle
 <span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>2               1    54 0.630</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </div>
-<section id="chi-quadrat-test" class="level3" data-number="3.2.1">
-<h3 data-number="3.2.1" class="anchored" data-anchor-id="chi-quadrat-test"><span class="header-section-number">3.2.1</span> 3. Chi-Quadrat Test</h3>
+<section id="chi-quadrat-test" class="level3">
+<h3 class="anchored" data-anchor-id="chi-quadrat-test">3. Chi-Quadrat Test</h3>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">table</span>(autylewis04<span class="sc">$</span>pepsi_placement, autylewis04<span class="sc">$</span>pepsi_chosen) <span class="sc">|&gt;</span></span>
 <span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">chisq.test</span>(<span class="at">correct =</span> <span class="cn">FALSE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -288,8 +288,8 @@ Quelle
 </div>
 <p><strong>Ergebnis:</strong> Die Produktwahl hängt damit zusammmen, ob man ein Product Placement gesehen hat (Chi^2 = 4.14, p&lt;.05)</p>
 </section>
-<section id="bivariate-korrelation" class="level3" data-number="3.2.2">
-<h3 data-number="3.2.2" class="anchored" data-anchor-id="bivariate-korrelation"><span class="header-section-number">3.2.2</span> 4. Bivariate Korrelation</h3>
+<section id="bivariate-korrelation" class="level3">
+<h3 class="anchored" data-anchor-id="bivariate-korrelation">4. Bivariate Korrelation</h3>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="fu">cor.test</span>(autylewis04<span class="sc">$</span>pepsi_placement, autylewis04<span class="sc">$</span>pepsi_chosen)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
@@ -308,8 +308,8 @@ Quelle
 </div>
 <p><strong><em>Ergebnis:</em></strong> Die Produktwahl hängt damit zusammmen, ob man ein Product Placement gesehen hat (r = .20, p&lt;.05)</p>
 </section>
-<section id="t-test" class="level3" data-number="3.2.3">
-<h3 data-number="3.2.3" class="anchored" data-anchor-id="t-test"><span class="header-section-number">3.2.3</span> T-Test</h3>
+<section id="t-test" class="level3">
+<h3 class="anchored" data-anchor-id="t-test">T-Test</h3>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="fu">t.test</span>(pepsi_chosen <span class="sc">~</span> pepsi_placement, <span class="at">data =</span> autylewis04, <span class="at">var.equal =</span> <span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
@@ -328,8 +328,8 @@ Quelle
 </div>
 <p><strong><em>Ergebnis:</em></strong> Die Produktwahl unterscheidet sich signifikant (T= -2.06, p&lt;.05) zwischen Leuten, die ein Placement (M = .63) und kein Placement (M = .43) sahen.</p>
 </section>
-<section id="einfaktorielle-varianzanalyse-anova" class="level3" data-number="3.2.4">
-<h3 data-number="3.2.4" class="anchored" data-anchor-id="einfaktorielle-varianzanalyse-anova"><span class="header-section-number">3.2.4</span> 5. Einfaktorielle Varianzanalyse (ANOVA)</h3>
+<section id="einfaktorielle-varianzanalyse-anova" class="level3">
+<h3 class="anchored" data-anchor-id="einfaktorielle-varianzanalyse-anova">5. Einfaktorielle Varianzanalyse (ANOVA)</h3>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="fu">aov</span>(pepsi_chosen <span class="sc">~</span> pepsi_placement, <span class="at">data =</span> autylewis04) <span class="sc">|&gt;</span></span>
 <span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summary</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -343,8 +343,8 @@ Quelle
 </div>
 <p><strong><em>Ergebnis:</em></strong> Product Placement hat einen signifikanten Einfluss (Haupteffekt) (F(1,103) = 4.23, p&lt;.05) auf Produktwahl.</p>
 </section>
-<section id="lineare-regression" class="level3" data-number="3.2.5">
-<h3 data-number="3.2.5" class="anchored" data-anchor-id="lineare-regression"><span class="header-section-number">3.2.5</span> 6. Lineare Regression</h3>
+<section id="lineare-regression" class="level3">
+<h3 class="anchored" data-anchor-id="lineare-regression">6. Lineare Regression</h3>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="fu">lm</span>(pepsi_chosen <span class="sc">~</span> pepsi_placement, <span class="at">data =</span> autylewis04) <span class="sc">|&gt;</span></span>
 <span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summary</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
