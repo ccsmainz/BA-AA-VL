@@ -1,6 +1,8 @@
 # VL Anwendungsorientierte Analyseverfahren, Institut für Publizistik, Uni Mainz
 # 2023-04-04
 
+set.seed(123)
+
 library(tidyverse)
 theme_set(theme_minimal())
 
@@ -15,11 +17,9 @@ summary(sample_a)
 sample_b <- sample(iq_population, size = 20)
 summary(sample_b)
 
-## T-Test
-
 t.test(sample_a, sample_b, var.equal = T)
 
-p_vals <- replicate(n = 100, {
+p_vals <- replicate(n = 1000, {
   t.test(
     x = sample(iq_population, 20),
     y = sample(iq_population, 20),
@@ -27,36 +27,23 @@ p_vals <- replicate(n = 100, {
   )$p.value
 })
 
-p_vals
+head(p_vals)
+
+#| fig-cap: "Histogranm von 1000 p-Werten aus der Simulation"
 qplot(p_vals)
 
 sum(p_vals <= .05)
 
-p_vals <- replicate(n = 10000, {
-  t.test(
-    x = sample(iq_population, 20),
-    y = sample(iq_population, 20),
-    var.equal = T
-  )$p.value
-})
-
-p_vals %>% head()
-qplot(p_vals)
-
-sum(p_vals <= .05)
-
-p_vals <- replicate(n = 100, {
+p_vals_1000 <- replicate(n = 1000, {
   t.test(
     x = sample(iq_population, 1000),
     y = sample(iq_population, 1000),
     var.equal = T
   )$p.value
 })
+qplot(p_vals_1000)
 
-p_vals
-qplot(p_vals)
-
-sum(p_vals <= .05)
+sum(p_vals_1000 <= .05)
 
 ## Beta-Fehler
 

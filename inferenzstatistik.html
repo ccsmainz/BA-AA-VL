@@ -124,6 +124,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   }
 }</script>
 
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
 
 </head>
 
@@ -187,18 +188,17 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   <ul>
   <li><a href="#alpha-fehler" id="toc-alpha-fehler" class="nav-link active" data-scroll-target="#alpha-fehler"><span class="toc-section-number">2.1</span>  Alpha-Fehler</a>
   <ul class="collapse">
-  <li><a href="#simulation-eines-t-tests-für-zwei-stichproben" id="toc-simulation-eines-t-tests-für-zwei-stichproben" class="nav-link" data-scroll-target="#simulation-eines-t-tests-für-zwei-stichproben">Simulation eines T-Tests für zwei Stichproben</a></li>
-  <li><a href="#wir-ziehen-zwei-stichproben" id="toc-wir-ziehen-zwei-stichproben" class="nav-link" data-scroll-target="#wir-ziehen-zwei-stichproben">Wir ziehen zwei Stichproben</a></li>
+  <li><a href="#simulation-der-grundgesamtheit" id="toc-simulation-der-grundgesamtheit" class="nav-link" data-scroll-target="#simulation-der-grundgesamtheit">Simulation der Grundgesamtheit</a></li>
+  <li><a href="#zwei-stichproben-aus-derselben-grundgesamtheit" id="toc-zwei-stichproben-aus-derselben-grundgesamtheit" class="nav-link" data-scroll-target="#zwei-stichproben-aus-derselben-grundgesamtheit">Zwei Stichproben aus derselben Grundgesamtheit</a></li>
+  <li><a href="#ein-einzelner-t-test" id="toc-ein-einzelner-t-test" class="nav-link" data-scroll-target="#ein-einzelner-t-test">Ein einzelner T-Test</a></li>
+  <li><a href="#simulation-von-1000-t-tests" id="toc-simulation-von-1000-t-tests" class="nav-link" data-scroll-target="#simulation-von-1000-t-tests">Simulation von 1000 T-Tests</a></li>
+  <li><a href="#fragen-zum-alpha-fehler" id="toc-fragen-zum-alpha-fehler" class="nav-link" data-scroll-target="#fragen-zum-alpha-fehler">Fragen zum Alpha-Fehler</a></li>
   </ul></li>
-  <li><a href="#t-test" id="toc-t-test" class="nav-link" data-scroll-target="#t-test"><span class="toc-section-number">2.2</span>  T-Test</a>
-  <ul class="collapse">
-  <li><a href="#wir-vergleichen-100-mal-zwei-20er-stichproben-und-speichern-den-p-wert" id="toc-wir-vergleichen-100-mal-zwei-20er-stichproben-und-speichern-den-p-wert" class="nav-link" data-scroll-target="#wir-vergleichen-100-mal-zwei-20er-stichproben-und-speichern-den-p-wert">Wir vergleichen 100 Mal zwei 20er Stichproben und speichern den p-Wert</a></li>
-  </ul></li>
-  <li><a href="#beta-fehler" id="toc-beta-fehler" class="nav-link" data-scroll-target="#beta-fehler"><span class="toc-section-number">2.3</span>  Beta-Fehler</a>
+  <li><a href="#beta-fehler" id="toc-beta-fehler" class="nav-link" data-scroll-target="#beta-fehler"><span class="toc-section-number">2.2</span>  Beta-Fehler</a>
   <ul class="collapse">
   <li><a href="#jgu-studierende-sind-etwas-schlauer-im-schnitt" id="toc-jgu-studierende-sind-etwas-schlauer-im-schnitt" class="nav-link" data-scroll-target="#jgu-studierende-sind-etwas-schlauer-im-schnitt">JGU-Studierende sind etwas schlauer im Schnitt</a></li>
   <li><a href="#wir-vergleichen-20-studierende-mit-20-anderen-mainzern" id="toc-wir-vergleichen-20-studierende-mit-20-anderen-mainzern" class="nav-link" data-scroll-target="#wir-vergleichen-20-studierende-mit-20-anderen-mainzern">Wir vergleichen 20 Studierende mit 20 anderen Mainzern</a></li>
-  <li><a href="#wir-vergleichen-100-mal-zwei-20er-stichproben-und-speichern-den-p-wert-1" id="toc-wir-vergleichen-100-mal-zwei-20er-stichproben-und-speichern-den-p-wert-1" class="nav-link" data-scroll-target="#wir-vergleichen-100-mal-zwei-20er-stichproben-und-speichern-den-p-wert-1">Wir vergleichen 100 Mal zwei 20er Stichproben und speichern den p-Wert</a></li>
+  <li><a href="#wir-vergleichen-100-mal-zwei-20er-stichproben-und-speichern-den-p-wert" id="toc-wir-vergleichen-100-mal-zwei-20er-stichproben-und-speichern-den-p-wert" class="nav-link" data-scroll-target="#wir-vergleichen-100-mal-zwei-20er-stichproben-und-speichern-den-p-wert">Wir vergleichen 100 Mal zwei 20er Stichproben und speichern den p-Wert</a></li>
   </ul></li>
   </ul>
 </nav>
@@ -217,42 +217,41 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </div>
 <section id="alpha-fehler" class="level2" data-number="2.1">
 <h2 data-number="2.1" class="anchored" data-anchor-id="alpha-fehler"><span class="header-section-number">2.1</span> Alpha-Fehler</h2>
-<section id="simulation-eines-t-tests-für-zwei-stichproben" class="level3">
-<h3 class="anchored" data-anchor-id="simulation-eines-t-tests-für-zwei-stichproben">Simulation eines T-Tests für zwei Stichproben</h3>
+<section id="simulation-der-grundgesamtheit" class="level3">
+<h3 class="anchored" data-anchor-id="simulation-der-grundgesamtheit">Simulation der Grundgesamtheit</h3>
 <p>IQ ist verteilt mit M = 100, SD = 15, Population von Mainz</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>iq_population <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(<span class="at">n =</span> <span class="dv">220000</span>, <span class="at">mean =</span> <span class="dv">100</span>, <span class="at">sd =</span> <span class="dv">15</span>)</span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(iq_population)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <div class="sourceCode" id="cb3"><pre class="sourceCode txt code-with-copy"><code class="sourceCode default"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>   Min. 1st Qu.  Median    Mean 3rd Qu.    Max. </span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>  25.34   89.83   99.97   99.99  110.14  169.02 </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>  34.27   89.96  100.05  100.06  110.16  166.57 </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </div>
 </section>
-<section id="wir-ziehen-zwei-stichproben" class="level3">
-<h3 class="anchored" data-anchor-id="wir-ziehen-zwei-stichproben">Wir ziehen zwei Stichproben</h3>
-<p>Stichprobe</p>
+<section id="zwei-stichproben-aus-derselben-grundgesamtheit" class="level3">
+<h3 class="anchored" data-anchor-id="zwei-stichproben-aus-derselben-grundgesamtheit">Zwei Stichproben aus derselben Grundgesamtheit</h3>
+<p>Stichprobe A</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>sample_a <span class="ot">&lt;-</span> <span class="fu">sample</span>(iq_population, <span class="at">size =</span> <span class="dv">20</span>)</span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(sample_a)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <div class="sourceCode" id="cb5"><pre class="sourceCode txt code-with-copy"><code class="sourceCode default"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>   Min. 1st Qu.  Median    Mean 3rd Qu.    Max. </span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>  68.76   91.84   99.89   98.05  106.38  113.11 </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>  65.66   87.99   97.07   98.55  107.57  140.32 </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </div>
-<p>Stichprobe 2</p>
+<p>Stichprobe B</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>sample_b <span class="ot">&lt;-</span> <span class="fu">sample</span>(iq_population, <span class="at">size =</span> <span class="dv">20</span>)</span>
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(sample_b)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <div class="sourceCode" id="cb7"><pre class="sourceCode txt code-with-copy"><code class="sourceCode default"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>   Min. 1st Qu.  Median    Mean 3rd Qu.    Max. </span>
-<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>  78.72   89.14  106.70  102.82  115.35  118.95 </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>  63.12   84.84   97.74   96.81  103.86  129.57 </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </div>
 </section>
-</section>
-<section id="t-test" class="level2" data-number="2.2">
-<h2 data-number="2.2" class="anchored" data-anchor-id="t-test"><span class="header-section-number">2.2</span> T-Test</h2>
+<section id="ein-einzelner-t-test" class="level3">
+<h3 class="anchored" data-anchor-id="ein-einzelner-t-test">Ein einzelner T-Test</h3>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">t.test</span>(sample_a, sample_b, <span class="at">var.equal =</span> T)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
@@ -260,19 +259,21 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>    Two Sample t-test</span>
 <span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>data:  sample_a and sample_b</span>
-<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>t = -1.1898, df = 38, p-value = 0.2415</span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>t = 0.32418, df = 38, p-value = 0.7476</span>
 <span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>alternative hypothesis: true difference in means is not equal to 0</span>
 <span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a>95 percent confidence interval:</span>
-<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a> -12.872691   3.342332</span>
+<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a> -9.124891 12.604639</span>
 <span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a>sample estimates:</span>
 <span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a>mean of x mean of y </span>
-<span id="cb9-11"><a href="#cb9-11" aria-hidden="true" tabindex="-1"></a> 98.05454 102.81972 </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb9-11"><a href="#cb9-11" aria-hidden="true" tabindex="-1"></a> 98.54772  96.80785 </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </div>
-<section id="wir-vergleichen-100-mal-zwei-20er-stichproben-und-speichern-den-p-wert" class="level3">
-<h3 class="anchored" data-anchor-id="wir-vergleichen-100-mal-zwei-20er-stichproben-und-speichern-den-p-wert">Wir vergleichen 100 Mal zwei 20er Stichproben und speichern den p-Wert</h3>
+</section>
+<section id="simulation-von-1000-t-tests" class="level3">
+<h3 class="anchored" data-anchor-id="simulation-von-1000-t-tests">Simulation von 1000 T-Tests</h3>
+<p>Wir vergleichen 1000 Mal zwei 20er Stichproben per T-Test und speichern die entstandenen 1000 p-Werte als <code>p_vals</code> ab.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>p_vals <span class="ot">&lt;-</span> <span class="fu">replicate</span>(<span class="at">n =</span> <span class="dv">100</span>, {</span>
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>p_vals <span class="ot">&lt;-</span> <span class="fu">replicate</span>(<span class="at">n =</span> <span class="dv">1000</span>, {</span>
 <span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">t.test</span>(</span>
 <span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">x =</span> <span class="fu">sample</span>(iq_population, <span class="dv">20</span>),</span>
 <span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">y =</span> <span class="fu">sample</span>(iq_population, <span class="dv">20</span>),</span>
@@ -280,230 +281,179 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>  )<span class="sc">$</span>p.value</span>
 <span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a>})</span>
 <span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a>p_vals</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(p_vals)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<div class="sourceCode" id="cb11"><pre class="sourceCode txt code-with-copy"><code class="sourceCode default"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>  [1] 0.266056788 0.011805834 0.167018134 0.704500107 0.345443621 0.380222957</span>
-<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>  [7] 0.470729480 0.643775800 0.918265539 0.022217129 0.537944721 0.966620458</span>
-<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a> [13] 0.672722733 0.768573553 0.780945795 0.685542986 0.477562735 0.906095194</span>
-<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a> [19] 0.972273787 0.542383276 0.710760366 0.602961353 0.690921487 0.189172575</span>
-<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a> [25] 0.375682831 0.437290189 0.550286392 0.510024563 0.294623368 0.233243960</span>
-<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a> [31] 0.437001839 0.122412971 0.547305050 0.367063808 0.090906863 0.238896427</span>
-<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a> [37] 0.243839546 0.217462523 0.661785433 0.589076942 0.771535845 0.636541321</span>
-<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a> [43] 0.557126481 0.778844084 0.829132381 0.399567182 0.602804909 0.761982310</span>
-<span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a> [49] 0.904516546 0.338807186 0.226692666 0.355730229 0.009262001 0.319170803</span>
-<span id="cb11-10"><a href="#cb11-10" aria-hidden="true" tabindex="-1"></a> [55] 0.304111802 0.330592594 0.538829723 0.272557828 0.999735236 0.863550739</span>
-<span id="cb11-11"><a href="#cb11-11" aria-hidden="true" tabindex="-1"></a> [61] 0.195930074 0.907587414 0.816406862 0.434219712 0.413247765 0.407960734</span>
-<span id="cb11-12"><a href="#cb11-12" aria-hidden="true" tabindex="-1"></a> [67] 0.137381726 0.483253420 0.182802222 0.825612703 0.618293400 0.386019222</span>
-<span id="cb11-13"><a href="#cb11-13" aria-hidden="true" tabindex="-1"></a> [73] 0.906676382 0.535119403 0.244795034 0.797052925 0.888893398 0.108516377</span>
-<span id="cb11-14"><a href="#cb11-14" aria-hidden="true" tabindex="-1"></a> [79] 0.812298581 0.964745453 0.858325862 0.372516509 0.835966793 0.196222184</span>
-<span id="cb11-15"><a href="#cb11-15" aria-hidden="true" tabindex="-1"></a> [85] 0.955888601 0.214908271 0.091312076 0.233860379 0.072470390 0.532740951</span>
-<span id="cb11-16"><a href="#cb11-16" aria-hidden="true" tabindex="-1"></a> [91] 0.044074319 0.693916057 0.375083609 0.905039459 0.460980580 0.717480461</span>
-<span id="cb11-17"><a href="#cb11-17" aria-hidden="true" tabindex="-1"></a> [97] 0.482886086 0.574766830 0.523788421 0.455518601</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb11"><pre class="sourceCode txt code-with-copy"><code class="sourceCode default"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>[1] 0.3277591 0.8006983 0.3906238 0.4958037 0.8417476 0.7549412</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
+</div>
+<div class="cell">
 <div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="fu">qplot</span>(p_vals)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
-<p><img src="inferenzstatistik_files/figure-html/unnamed-chunk-6-1.png" class="img-fluid" width="768"></p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="inferenzstatistik_files/figure-html/unnamed-chunk-8-1.png" class="img-fluid figure-img" width="768"></p>
+<p></p><figcaption class="figure-caption">Histogranm von 1000 p-Werten aus der Simulation</figcaption><p></p>
+</figure>
 </div>
 </div>
-<p><strong>Frage 1:</strong> Wieviele p-Werte sind signifikant (Alpha-Fehler)?</p>
+</div>
+</section>
+<section id="fragen-zum-alpha-fehler" class="level3">
+<h3 class="anchored" data-anchor-id="fragen-zum-alpha-fehler">Fragen zum Alpha-Fehler</h3>
+<p><strong>Frage 1:</strong> Wieviele p-Werte sollten signifikant sein (Alpha-Fehler)?</p>
+<p><strong>Antwort:</strong> Bei einem <span class="math inline">\(\alpha\)</span>-Niveau von 0.05 sollten es ungefähr 50 von 1000 sein.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sum</span>(p_vals <span class="sc">&lt;=</span> .<span class="dv">05</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<div class="sourceCode" id="cb14"><pre class="sourceCode txt code-with-copy"><code class="sourceCode default"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>[1] 4</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb14"><pre class="sourceCode txt code-with-copy"><code class="sourceCode default"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>[1] 49</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </div>
-<p><strong>Frage 2:</strong> Was sollte herauskommen, wenn wir statt 100 gleich 10.000 Simulationen machen?</p>
-<p>Wenn die Nullhypthoese zutrifft, ist der p-Wert eine Zufallsvariable, daher einfach gleichverteilt.</p>
+<p><strong>Frage 2:</strong> Was sollte sich am Alpha-Fehler mit größeren Stichproben ändern?</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>p_vals <span class="ot">&lt;-</span> <span class="fu">replicate</span>(<span class="at">n =</span> <span class="dv">10000</span>, {</span>
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>p_vals_1000 <span class="ot">&lt;-</span> <span class="fu">replicate</span>(<span class="at">n =</span> <span class="dv">1000</span>, {</span>
 <span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">t.test</span>(</span>
-<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">x =</span> <span class="fu">sample</span>(iq_population, <span class="dv">20</span>),</span>
-<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">y =</span> <span class="fu">sample</span>(iq_population, <span class="dv">20</span>),</span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">x =</span> <span class="fu">sample</span>(iq_population, <span class="dv">1000</span>),</span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">y =</span> <span class="fu">sample</span>(iq_population, <span class="dv">1000</span>),</span>
 <span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">var.equal =</span> T</span>
 <span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a>  )<span class="sc">$</span>p.value</span>
 <span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a>})</span>
-<span id="cb15-8"><a href="#cb15-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb15-9"><a href="#cb15-9" aria-hidden="true" tabindex="-1"></a>p_vals <span class="sc">%&gt;%</span> <span class="fu">head</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<div class="sourceCode" id="cb16"><pre class="sourceCode txt code-with-copy"><code class="sourceCode default"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>[1] 0.9105245 0.8109785 0.4772827 0.4015347 0.4925812 0.5969744</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="fu">qplot</span>(p_vals)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output-display">
-<p><img src="inferenzstatistik_files/figure-html/unnamed-chunk-8-1.png" class="img-fluid" width="768"></p>
-</div>
-</div>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sum</span>(p_vals <span class="sc">&lt;=</span> .<span class="dv">05</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<div class="sourceCode" id="cb19"><pre class="sourceCode txt code-with-copy"><code class="sourceCode default"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>[1] 506</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-</div>
-<p><strong>Frage 3:</strong> Was sollte sich am Alpha-Fehler mit größeren Stichproben ändern?</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>p_vals <span class="ot">&lt;-</span> <span class="fu">replicate</span>(<span class="at">n =</span> <span class="dv">100</span>, {</span>
-<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">t.test</span>(</span>
-<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">x =</span> <span class="fu">sample</span>(iq_population, <span class="dv">1000</span>),</span>
-<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">y =</span> <span class="fu">sample</span>(iq_population, <span class="dv">1000</span>),</span>
-<span id="cb20-5"><a href="#cb20-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">var.equal =</span> T</span>
-<span id="cb20-6"><a href="#cb20-6" aria-hidden="true" tabindex="-1"></a>  )<span class="sc">$</span>p.value</span>
-<span id="cb20-7"><a href="#cb20-7" aria-hidden="true" tabindex="-1"></a>})</span>
-<span id="cb20-8"><a href="#cb20-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb20-9"><a href="#cb20-9" aria-hidden="true" tabindex="-1"></a>p_vals</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<div class="sourceCode" id="cb21"><pre class="sourceCode txt code-with-copy"><code class="sourceCode default"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>  [1] 0.47330064 0.97803716 0.60552374 0.47804164 0.04481504 0.99386762</span>
-<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>  [7] 0.66882975 0.87570723 0.67418884 0.27033049 0.27676961 0.95478092</span>
-<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a> [13] 0.82529926 0.18429905 0.82638485 0.66195516 0.15162659 0.09527672</span>
-<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a> [19] 0.32931873 0.49764559 0.07085368 0.12454357 0.69431119 0.81671265</span>
-<span id="cb21-5"><a href="#cb21-5" aria-hidden="true" tabindex="-1"></a> [25] 0.22421024 0.95720505 0.47120339 0.87641642 0.15009605 0.45442674</span>
-<span id="cb21-6"><a href="#cb21-6" aria-hidden="true" tabindex="-1"></a> [31] 0.09828108 0.68410201 0.65802506 0.57657342 0.14424806 0.28387216</span>
-<span id="cb21-7"><a href="#cb21-7" aria-hidden="true" tabindex="-1"></a> [37] 0.51248703 0.42277413 0.06365114 0.93067258 0.89580545 0.24027699</span>
-<span id="cb21-8"><a href="#cb21-8" aria-hidden="true" tabindex="-1"></a> [43] 0.04239783 0.30725156 0.01551675 0.04369153 0.65302064 0.01135340</span>
-<span id="cb21-9"><a href="#cb21-9" aria-hidden="true" tabindex="-1"></a> [49] 0.66983199 0.87306099 0.52900655 0.13176955 0.25849150 0.79479684</span>
-<span id="cb21-10"><a href="#cb21-10" aria-hidden="true" tabindex="-1"></a> [55] 0.83263159 0.19727217 0.01343720 0.64885425 0.81791310 0.67095631</span>
-<span id="cb21-11"><a href="#cb21-11" aria-hidden="true" tabindex="-1"></a> [61] 0.14559710 0.12670924 0.99630251 0.37883507 0.23152338 0.74433267</span>
-<span id="cb21-12"><a href="#cb21-12" aria-hidden="true" tabindex="-1"></a> [67] 0.86039802 0.22017699 0.21654311 0.41424776 0.87681304 0.24049485</span>
-<span id="cb21-13"><a href="#cb21-13" aria-hidden="true" tabindex="-1"></a> [73] 0.90436880 0.78115028 0.57888202 0.42661511 0.44350764 0.64446756</span>
-<span id="cb21-14"><a href="#cb21-14" aria-hidden="true" tabindex="-1"></a> [79] 0.11541168 0.99088408 0.49989769 0.38667563 0.96294195 0.55647787</span>
-<span id="cb21-15"><a href="#cb21-15" aria-hidden="true" tabindex="-1"></a> [85] 0.40131075 0.32077311 0.51623369 0.01691940 0.11618645 0.85359228</span>
-<span id="cb21-16"><a href="#cb21-16" aria-hidden="true" tabindex="-1"></a> [91] 0.93661658 0.35464948 0.61524348 0.84011239 0.78087436 0.50449350</span>
-<span id="cb21-17"><a href="#cb21-17" aria-hidden="true" tabindex="-1"></a> [97] 0.08958934 0.86380419 0.86894742 0.20935281</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="fu">qplot</span>(p_vals)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb15-8"><a href="#cb15-8" aria-hidden="true" tabindex="-1"></a><span class="fu">qplot</span>(p_vals_1000)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <p><img src="inferenzstatistik_files/figure-html/unnamed-chunk-10-1.png" class="img-fluid" width="768"></p>
 </div>
 </div>
+<p><strong>Antwort:</strong> Nichts. Der Alpha-Fehler ist unabhängig von der Größe der gezogenen Stichproben.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sum</span>(p_vals <span class="sc">&lt;=</span> .<span class="dv">05</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sum</span>(p_vals_1000 <span class="sc">&lt;=</span> .<span class="dv">05</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<div class="sourceCode" id="cb24"><pre class="sourceCode txt code-with-copy"><code class="sourceCode default"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>[1] 7</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb17"><pre class="sourceCode txt code-with-copy"><code class="sourceCode default"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>[1] 54</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </div>
 </section>
 </section>
-<section id="beta-fehler" class="level2" data-number="2.3">
-<h2 data-number="2.3" class="anchored" data-anchor-id="beta-fehler"><span class="header-section-number">2.3</span> Beta-Fehler</h2>
+<section id="beta-fehler" class="level2" data-number="2.2">
+<h2 data-number="2.2" class="anchored" data-anchor-id="beta-fehler"><span class="header-section-number">2.2</span> Beta-Fehler</h2>
 <section id="jgu-studierende-sind-etwas-schlauer-im-schnitt" class="level3">
 <h3 class="anchored" data-anchor-id="jgu-studierende-sind-etwas-schlauer-im-schnitt">JGU-Studierende sind etwas schlauer im Schnitt</h3>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a>iq_jgu <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(<span class="at">n =</span> <span class="dv">31000</span>, <span class="at">mean =</span> <span class="dv">110</span>, <span class="at">sd =</span> <span class="dv">15</span>)</span>
-<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(iq_jgu)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>iq_jgu <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(<span class="at">n =</span> <span class="dv">31000</span>, <span class="at">mean =</span> <span class="dv">110</span>, <span class="at">sd =</span> <span class="dv">15</span>)</span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(iq_jgu)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<div class="sourceCode" id="cb26"><pre class="sourceCode txt code-with-copy"><code class="sourceCode default"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>   Min. 1st Qu.  Median    Mean 3rd Qu.    Max. </span>
-<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a>  44.95   99.90  109.94  109.99  120.05  170.32 </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb19"><pre class="sourceCode txt code-with-copy"><code class="sourceCode default"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>   Min. 1st Qu.  Median    Mean 3rd Qu.    Max. </span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>  49.34  100.00  110.03  110.03  120.05  177.75 </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </div>
 </section>
 <section id="wir-vergleichen-20-studierende-mit-20-anderen-mainzern" class="level3">
 <h3 class="anchored" data-anchor-id="wir-vergleichen-20-studierende-mit-20-anderen-mainzern">Wir vergleichen 20 Studierende mit 20 anderen Mainzern</h3>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="fu">t.test</span>(<span class="fu">sample</span>(iq_jgu, <span class="at">size =</span> <span class="dv">20</span>),</span>
-<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">sample</span>(iq_population, <span class="at">size =</span> <span class="dv">20</span>),</span>
-<span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">var.equal =</span> T</span>
-<span id="cb27-4"><a href="#cb27-4" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="fu">t.test</span>(<span class="fu">sample</span>(iq_jgu, <span class="at">size =</span> <span class="dv">20</span>),</span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">sample</span>(iq_population, <span class="at">size =</span> <span class="dv">20</span>),</span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">var.equal =</span> T</span>
+<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<div class="sourceCode" id="cb28"><pre class="sourceCode txt code-with-copy"><code class="sourceCode default"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a>    Two Sample t-test</span>
-<span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb28-4"><a href="#cb28-4" aria-hidden="true" tabindex="-1"></a>data:  sample(iq_jgu, size = 20) and sample(iq_population, size = 20)</span>
-<span id="cb28-5"><a href="#cb28-5" aria-hidden="true" tabindex="-1"></a>t = 4.3341, df = 38, p-value = 0.0001036</span>
-<span id="cb28-6"><a href="#cb28-6" aria-hidden="true" tabindex="-1"></a>alternative hypothesis: true difference in means is not equal to 0</span>
-<span id="cb28-7"><a href="#cb28-7" aria-hidden="true" tabindex="-1"></a>95 percent confidence interval:</span>
-<span id="cb28-8"><a href="#cb28-8" aria-hidden="true" tabindex="-1"></a> 11.31438 31.14824</span>
-<span id="cb28-9"><a href="#cb28-9" aria-hidden="true" tabindex="-1"></a>sample estimates:</span>
-<span id="cb28-10"><a href="#cb28-10" aria-hidden="true" tabindex="-1"></a>mean of x mean of y </span>
-<span id="cb28-11"><a href="#cb28-11" aria-hidden="true" tabindex="-1"></a>116.15676  94.92545 </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb21"><pre class="sourceCode txt code-with-copy"><code class="sourceCode default"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>    Two Sample t-test</span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a>data:  sample(iq_jgu, size = 20) and sample(iq_population, size = 20)</span>
+<span id="cb21-5"><a href="#cb21-5" aria-hidden="true" tabindex="-1"></a>t = 1.73, df = 38, p-value = 0.09175</span>
+<span id="cb21-6"><a href="#cb21-6" aria-hidden="true" tabindex="-1"></a>alternative hypothesis: true difference in means is not equal to 0</span>
+<span id="cb21-7"><a href="#cb21-7" aria-hidden="true" tabindex="-1"></a>95 percent confidence interval:</span>
+<span id="cb21-8"><a href="#cb21-8" aria-hidden="true" tabindex="-1"></a> -1.300427 16.583877</span>
+<span id="cb21-9"><a href="#cb21-9" aria-hidden="true" tabindex="-1"></a>sample estimates:</span>
+<span id="cb21-10"><a href="#cb21-10" aria-hidden="true" tabindex="-1"></a>mean of x mean of y </span>
+<span id="cb21-11"><a href="#cb21-11" aria-hidden="true" tabindex="-1"></a> 110.4963  102.8545 </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </div>
 </section>
-<section id="wir-vergleichen-100-mal-zwei-20er-stichproben-und-speichern-den-p-wert-1" class="level3">
-<h3 class="anchored" data-anchor-id="wir-vergleichen-100-mal-zwei-20er-stichproben-und-speichern-den-p-wert-1">Wir vergleichen 100 Mal zwei 20er Stichproben und speichern den p-Wert</h3>
+<section id="wir-vergleichen-100-mal-zwei-20er-stichproben-und-speichern-den-p-wert" class="level3">
+<h3 class="anchored" data-anchor-id="wir-vergleichen-100-mal-zwei-20er-stichproben-und-speichern-den-p-wert">Wir vergleichen 100 Mal zwei 20er Stichproben und speichern den p-Wert</h3>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a>p_vals2 <span class="ot">&lt;-</span> <span class="fu">replicate</span>(<span class="at">n =</span> <span class="dv">100</span>, {</span>
-<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">t.test</span>(</span>
-<span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">x =</span> <span class="fu">sample</span>(iq_jgu, <span class="dv">20</span>),</span>
-<span id="cb29-4"><a href="#cb29-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">y =</span> <span class="fu">sample</span>(iq_population, <span class="dv">20</span>),</span>
-<span id="cb29-5"><a href="#cb29-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">var.equal =</span> T</span>
-<span id="cb29-6"><a href="#cb29-6" aria-hidden="true" tabindex="-1"></a>  )<span class="sc">$</span>p.value</span>
-<span id="cb29-7"><a href="#cb29-7" aria-hidden="true" tabindex="-1"></a>})</span>
-<span id="cb29-8"><a href="#cb29-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb29-9"><a href="#cb29-9" aria-hidden="true" tabindex="-1"></a>p_vals2</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>p_vals2 <span class="ot">&lt;-</span> <span class="fu">replicate</span>(<span class="at">n =</span> <span class="dv">100</span>, {</span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">t.test</span>(</span>
+<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">x =</span> <span class="fu">sample</span>(iq_jgu, <span class="dv">20</span>),</span>
+<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">y =</span> <span class="fu">sample</span>(iq_population, <span class="dv">20</span>),</span>
+<span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">var.equal =</span> T</span>
+<span id="cb22-6"><a href="#cb22-6" aria-hidden="true" tabindex="-1"></a>  )<span class="sc">$</span>p.value</span>
+<span id="cb22-7"><a href="#cb22-7" aria-hidden="true" tabindex="-1"></a>})</span>
+<span id="cb22-8"><a href="#cb22-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-9"><a href="#cb22-9" aria-hidden="true" tabindex="-1"></a>p_vals2</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<div class="sourceCode" id="cb30"><pre class="sourceCode txt code-with-copy"><code class="sourceCode default"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a>  [1] 0.0049323784 0.0136094189 0.0707891474 0.0332167058 0.0039317825</span>
-<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a>  [6] 0.9691063390 0.9547288833 0.0123310283 0.1049513345 0.0035313236</span>
-<span id="cb30-3"><a href="#cb30-3" aria-hidden="true" tabindex="-1"></a> [11] 0.1725749591 0.0154726762 0.0002586409 0.0039336837 0.0242107887</span>
-<span id="cb30-4"><a href="#cb30-4" aria-hidden="true" tabindex="-1"></a> [16] 0.0001625974 0.1006175314 0.0007169191 0.0153680160 0.0855882797</span>
-<span id="cb30-5"><a href="#cb30-5" aria-hidden="true" tabindex="-1"></a> [21] 0.1342611533 0.0080562473 0.8959677331 0.0032556897 0.0217427182</span>
-<span id="cb30-6"><a href="#cb30-6" aria-hidden="true" tabindex="-1"></a> [26] 0.0009877948 0.1425759779 0.0379789706 0.0014634392 0.5784442513</span>
-<span id="cb30-7"><a href="#cb30-7" aria-hidden="true" tabindex="-1"></a> [31] 0.0075639667 0.0734148693 0.1451274450 0.0289075908 0.2133173550</span>
-<span id="cb30-8"><a href="#cb30-8" aria-hidden="true" tabindex="-1"></a> [36] 0.3196132842 0.3077926419 0.0069256668 0.0065880164 0.0040880429</span>
-<span id="cb30-9"><a href="#cb30-9" aria-hidden="true" tabindex="-1"></a> [41] 0.1104754367 0.0018220889 0.1260005549 0.0180870584 0.0233052924</span>
-<span id="cb30-10"><a href="#cb30-10" aria-hidden="true" tabindex="-1"></a> [46] 0.3308826938 0.0509968109 0.3161577484 0.0126299747 0.1232854768</span>
-<span id="cb30-11"><a href="#cb30-11" aria-hidden="true" tabindex="-1"></a> [51] 0.0289609462 0.0266416630 0.0498878385 0.1393064500 0.0100350445</span>
-<span id="cb30-12"><a href="#cb30-12" aria-hidden="true" tabindex="-1"></a> [56] 0.0009008413 0.0570560150 0.0048690822 0.0204878817 0.0001441714</span>
-<span id="cb30-13"><a href="#cb30-13" aria-hidden="true" tabindex="-1"></a> [61] 0.7387953878 0.1137451328 0.0676074947 0.0364366528 0.0529649836</span>
-<span id="cb30-14"><a href="#cb30-14" aria-hidden="true" tabindex="-1"></a> [66] 0.0100470197 0.0148309115 0.1269561165 0.0007373738 0.0032011645</span>
-<span id="cb30-15"><a href="#cb30-15" aria-hidden="true" tabindex="-1"></a> [71] 0.0153007551 0.0019384566 0.0051785453 0.0111890759 0.0027892532</span>
-<span id="cb30-16"><a href="#cb30-16" aria-hidden="true" tabindex="-1"></a> [76] 0.0058568178 0.0370128626 0.4403074707 0.0148626188 0.0130871814</span>
-<span id="cb30-17"><a href="#cb30-17" aria-hidden="true" tabindex="-1"></a> [81] 0.0015739983 0.0015015578 0.1390556435 0.0167209388 0.1689882228</span>
-<span id="cb30-18"><a href="#cb30-18" aria-hidden="true" tabindex="-1"></a> [86] 0.2285722087 0.0414812370 0.0089885526 0.0832757983 0.0036931749</span>
-<span id="cb30-19"><a href="#cb30-19" aria-hidden="true" tabindex="-1"></a> [91] 0.0043361245 0.1224352886 0.2046439779 0.0107873263 0.0009491044</span>
-<span id="cb30-20"><a href="#cb30-20" aria-hidden="true" tabindex="-1"></a> [96] 0.0403679980 0.3940690740 0.0123224247 0.0001850200 0.4169194907</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb23"><pre class="sourceCode txt code-with-copy"><code class="sourceCode default"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>  [1] 1.396620e-02 4.139214e-03 1.128516e-01 2.316930e-03 8.499702e-03</span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>  [6] 5.910400e-01 6.977161e-04 3.970621e-01 1.547617e-01 5.029154e-02</span>
+<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a> [11] 9.320638e-04 3.500374e-01 4.111679e-01 5.733023e-02 3.352042e-02</span>
+<span id="cb23-4"><a href="#cb23-4" aria-hidden="true" tabindex="-1"></a> [16] 4.612069e-06 4.718755e-03 4.497290e-02 1.202321e-02 3.080611e-02</span>
+<span id="cb23-5"><a href="#cb23-5" aria-hidden="true" tabindex="-1"></a> [21] 6.069314e-02 2.778224e-02 3.127866e-01 5.812628e-03 4.734412e-02</span>
+<span id="cb23-6"><a href="#cb23-6" aria-hidden="true" tabindex="-1"></a> [26] 2.396559e-02 2.502602e-01 5.934940e-01 8.174701e-03 9.512541e-05</span>
+<span id="cb23-7"><a href="#cb23-7" aria-hidden="true" tabindex="-1"></a> [31] 9.151324e-02 1.408652e-02 5.739861e-04 4.334098e-01 9.808676e-05</span>
+<span id="cb23-8"><a href="#cb23-8" aria-hidden="true" tabindex="-1"></a> [36] 5.726567e-02 6.741673e-01 9.801357e-04 8.594338e-02 2.524409e-02</span>
+<span id="cb23-9"><a href="#cb23-9" aria-hidden="true" tabindex="-1"></a> [41] 1.189499e-02 8.102527e-04 1.136422e-02 3.006668e-01 3.160237e-04</span>
+<span id="cb23-10"><a href="#cb23-10" aria-hidden="true" tabindex="-1"></a> [46] 8.207509e-02 1.278884e-01 1.686633e-02 4.281089e-07 3.599210e-03</span>
+<span id="cb23-11"><a href="#cb23-11" aria-hidden="true" tabindex="-1"></a> [51] 1.295157e-01 4.527177e-01 1.438637e-01 2.635140e-02 1.245050e-02</span>
+<span id="cb23-12"><a href="#cb23-12" aria-hidden="true" tabindex="-1"></a> [56] 6.054041e-03 2.144963e-02 8.029967e-05 1.911377e-01 6.539973e-02</span>
+<span id="cb23-13"><a href="#cb23-13" aria-hidden="true" tabindex="-1"></a> [61] 4.801423e-01 3.389832e-01 8.699158e-02 1.181282e-02 7.180307e-01</span>
+<span id="cb23-14"><a href="#cb23-14" aria-hidden="true" tabindex="-1"></a> [66] 2.428749e-03 1.433594e-03 9.961833e-06 1.804891e-02 1.958996e-02</span>
+<span id="cb23-15"><a href="#cb23-15" aria-hidden="true" tabindex="-1"></a> [71] 6.987410e-02 1.134219e-02 4.488589e-01 2.677713e-02 1.717904e-03</span>
+<span id="cb23-16"><a href="#cb23-16" aria-hidden="true" tabindex="-1"></a> [76] 6.703341e-02 6.515734e-03 2.164346e-01 1.853162e-01 4.820224e-04</span>
+<span id="cb23-17"><a href="#cb23-17" aria-hidden="true" tabindex="-1"></a> [81] 5.438248e-02 6.810235e-05 2.005428e-02 8.961120e-01 5.390848e-01</span>
+<span id="cb23-18"><a href="#cb23-18" aria-hidden="true" tabindex="-1"></a> [86] 1.181168e-01 3.677589e-03 3.445374e-03 5.566826e-02 4.236047e-04</span>
+<span id="cb23-19"><a href="#cb23-19" aria-hidden="true" tabindex="-1"></a> [91] 4.564032e-01 2.048324e-02 2.141226e-02 1.329188e-03 3.014395e-01</span>
+<span id="cb23-20"><a href="#cb23-20" aria-hidden="true" tabindex="-1"></a> [96] 2.623363e-02 1.350783e-02 4.062448e-02 1.276352e-02 4.113239e-02</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a><span class="fu">qplot</span>(p_vals2)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="fu">qplot</span>(p_vals2)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <p><img src="inferenzstatistik_files/figure-html/unnamed-chunk-14-1.png" class="img-fluid" width="768"></p>
 </div>
 </div>
 <p><strong>Frage 1:</strong> Wieviele p-Werte sind nicht-signifikant (Beta-Fehler)?</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb32"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sum</span>(p_vals2 <span class="sc">&gt;</span> .<span class="dv">05</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sum</span>(p_vals2 <span class="sc">&gt;</span> .<span class="dv">05</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<div class="sourceCode" id="cb33"><pre class="sourceCode txt code-with-copy"><code class="sourceCode default"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a>[1] 38</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb26"><pre class="sourceCode txt code-with-copy"><code class="sourceCode default"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>[1] 41</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </div>
 <p><strong>Frage 2:</strong> Was sollte sich am Beta-Fehler mit größeren Stichproben ändern?</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb34"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a>p_vals2 <span class="ot">&lt;-</span> <span class="fu">replicate</span>(<span class="at">n =</span> <span class="dv">100</span>, {</span>
-<span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">t.test</span>(</span>
-<span id="cb34-3"><a href="#cb34-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">x =</span> <span class="fu">sample</span>(iq_jgu, <span class="dv">300</span>),</span>
-<span id="cb34-4"><a href="#cb34-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">y =</span> <span class="fu">sample</span>(iq_population, <span class="dv">300</span>),</span>
-<span id="cb34-5"><a href="#cb34-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">var.equal =</span> T</span>
-<span id="cb34-6"><a href="#cb34-6" aria-hidden="true" tabindex="-1"></a>  )<span class="sc">$</span>p.value</span>
-<span id="cb34-7"><a href="#cb34-7" aria-hidden="true" tabindex="-1"></a>})</span>
-<span id="cb34-8"><a href="#cb34-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-9"><a href="#cb34-9" aria-hidden="true" tabindex="-1"></a>p_vals2</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a>p_vals2 <span class="ot">&lt;-</span> <span class="fu">replicate</span>(<span class="at">n =</span> <span class="dv">100</span>, {</span>
+<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">t.test</span>(</span>
+<span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">x =</span> <span class="fu">sample</span>(iq_jgu, <span class="dv">300</span>),</span>
+<span id="cb27-4"><a href="#cb27-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">y =</span> <span class="fu">sample</span>(iq_population, <span class="dv">300</span>),</span>
+<span id="cb27-5"><a href="#cb27-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">var.equal =</span> T</span>
+<span id="cb27-6"><a href="#cb27-6" aria-hidden="true" tabindex="-1"></a>  )<span class="sc">$</span>p.value</span>
+<span id="cb27-7"><a href="#cb27-7" aria-hidden="true" tabindex="-1"></a>})</span>
+<span id="cb27-8"><a href="#cb27-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-9"><a href="#cb27-9" aria-hidden="true" tabindex="-1"></a>p_vals2</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<div class="sourceCode" id="cb35"><pre class="sourceCode txt code-with-copy"><code class="sourceCode default"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a>  [1] 5.893541e-17 1.632825e-12 7.202508e-14 4.503420e-19 1.008217e-20</span>
-<span id="cb35-2"><a href="#cb35-2" aria-hidden="true" tabindex="-1"></a>  [6] 1.375041e-14 1.314498e-16 4.505030e-16 2.207744e-14 2.725436e-09</span>
-<span id="cb35-3"><a href="#cb35-3" aria-hidden="true" tabindex="-1"></a> [11] 6.441425e-18 3.336687e-16 6.322964e-13 6.048686e-12 3.436564e-15</span>
-<span id="cb35-4"><a href="#cb35-4" aria-hidden="true" tabindex="-1"></a> [16] 6.440244e-12 8.107246e-17 5.255984e-15 1.547903e-15 2.674060e-12</span>
-<span id="cb35-5"><a href="#cb35-5" aria-hidden="true" tabindex="-1"></a> [21] 3.896387e-18 8.780714e-15 2.159458e-17 3.232757e-14 1.454338e-15</span>
-<span id="cb35-6"><a href="#cb35-6" aria-hidden="true" tabindex="-1"></a> [26] 8.224677e-16 1.379423e-19 2.727604e-15 9.599139e-16 6.471341e-21</span>
-<span id="cb35-7"><a href="#cb35-7" aria-hidden="true" tabindex="-1"></a> [31] 3.277313e-15 8.331084e-17 7.368305e-19 1.697235e-18 5.201681e-11</span>
-<span id="cb35-8"><a href="#cb35-8" aria-hidden="true" tabindex="-1"></a> [36] 1.144712e-12 1.146079e-13 5.042670e-15 1.624904e-14 2.723903e-17</span>
-<span id="cb35-9"><a href="#cb35-9" aria-hidden="true" tabindex="-1"></a> [41] 4.636439e-17 6.155706e-18 6.756960e-16 3.603510e-16 1.569653e-14</span>
-<span id="cb35-10"><a href="#cb35-10" aria-hidden="true" tabindex="-1"></a> [46] 3.551658e-18 6.344705e-14 5.769273e-12 2.642840e-13 6.162738e-16</span>
-<span id="cb35-11"><a href="#cb35-11" aria-hidden="true" tabindex="-1"></a> [51] 1.740672e-17 1.700968e-12 2.248875e-13 8.094686e-15 3.204757e-12</span>
-<span id="cb35-12"><a href="#cb35-12" aria-hidden="true" tabindex="-1"></a> [56] 1.039805e-17 2.948803e-12 4.606922e-11 1.657453e-13 5.601011e-10</span>
-<span id="cb35-13"><a href="#cb35-13" aria-hidden="true" tabindex="-1"></a> [61] 3.107334e-18 4.732416e-14 2.655210e-16 1.573649e-14 5.546494e-10</span>
-<span id="cb35-14"><a href="#cb35-14" aria-hidden="true" tabindex="-1"></a> [66] 4.249898e-15 1.022645e-17 3.355154e-18 8.371786e-15 5.373560e-16</span>
-<span id="cb35-15"><a href="#cb35-15" aria-hidden="true" tabindex="-1"></a> [71] 5.821381e-14 1.985269e-15 3.939942e-13 3.540840e-13 3.428797e-14</span>
-<span id="cb35-16"><a href="#cb35-16" aria-hidden="true" tabindex="-1"></a> [76] 3.903880e-10 6.118959e-12 2.717248e-17 2.174368e-25 1.779461e-13</span>
-<span id="cb35-17"><a href="#cb35-17" aria-hidden="true" tabindex="-1"></a> [81] 2.407854e-13 1.157753e-10 2.846724e-18 1.086064e-13 1.157944e-15</span>
-<span id="cb35-18"><a href="#cb35-18" aria-hidden="true" tabindex="-1"></a> [86] 1.189862e-18 1.803112e-20 1.032433e-12 7.586722e-13 2.547765e-14</span>
-<span id="cb35-19"><a href="#cb35-19" aria-hidden="true" tabindex="-1"></a> [91] 1.476021e-15 5.593700e-18 3.185670e-15 1.614770e-16 1.509294e-19</span>
-<span id="cb35-20"><a href="#cb35-20" aria-hidden="true" tabindex="-1"></a> [96] 8.289040e-18 5.438738e-13 4.921509e-17 7.810381e-23 4.937885e-14</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb28"><pre class="sourceCode txt code-with-copy"><code class="sourceCode default"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a>  [1] 2.313883e-15 1.911124e-16 4.618914e-12 2.584255e-12 1.947295e-16</span>
+<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a>  [6] 1.266021e-14 3.998043e-15 5.081719e-11 4.676137e-17 1.298212e-19</span>
+<span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a> [11] 1.426199e-19 5.210481e-17 5.150071e-12 1.277086e-13 8.430625e-21</span>
+<span id="cb28-4"><a href="#cb28-4" aria-hidden="true" tabindex="-1"></a> [16] 2.393359e-14 1.232374e-15 1.250334e-11 5.843802e-18 4.671832e-13</span>
+<span id="cb28-5"><a href="#cb28-5" aria-hidden="true" tabindex="-1"></a> [21] 3.367874e-16 3.042788e-14 4.753773e-21 2.128637e-17 3.379700e-15</span>
+<span id="cb28-6"><a href="#cb28-6" aria-hidden="true" tabindex="-1"></a> [26] 2.580265e-12 2.065637e-20 3.508846e-13 1.790634e-16 4.132522e-15</span>
+<span id="cb28-7"><a href="#cb28-7" aria-hidden="true" tabindex="-1"></a> [31] 6.892810e-17 9.744122e-10 1.782714e-13 8.891454e-15 9.058053e-18</span>
+<span id="cb28-8"><a href="#cb28-8" aria-hidden="true" tabindex="-1"></a> [36] 4.102868e-15 1.742235e-17 7.867455e-15 7.053391e-21 7.154439e-12</span>
+<span id="cb28-9"><a href="#cb28-9" aria-hidden="true" tabindex="-1"></a> [41] 2.551440e-16 9.725380e-12 7.618087e-21 6.632255e-19 1.286091e-12</span>
+<span id="cb28-10"><a href="#cb28-10" aria-hidden="true" tabindex="-1"></a> [46] 3.212576e-10 1.882382e-16 2.010477e-17 1.782239e-14 1.914715e-17</span>
+<span id="cb28-11"><a href="#cb28-11" aria-hidden="true" tabindex="-1"></a> [51] 1.515972e-18 9.118213e-16 5.241668e-10 5.971295e-14 3.761073e-19</span>
+<span id="cb28-12"><a href="#cb28-12" aria-hidden="true" tabindex="-1"></a> [56] 1.950316e-13 6.419347e-13 1.618344e-14 5.008518e-17 1.056238e-15</span>
+<span id="cb28-13"><a href="#cb28-13" aria-hidden="true" tabindex="-1"></a> [61] 1.140967e-10 1.594593e-15 2.501507e-19 7.479315e-20 3.090048e-15</span>
+<span id="cb28-14"><a href="#cb28-14" aria-hidden="true" tabindex="-1"></a> [66] 1.906053e-13 5.366881e-15 7.265467e-13 1.102440e-17 6.151297e-16</span>
+<span id="cb28-15"><a href="#cb28-15" aria-hidden="true" tabindex="-1"></a> [71] 3.053445e-14 1.548571e-17 2.864902e-13 1.462958e-11 8.297742e-21</span>
+<span id="cb28-16"><a href="#cb28-16" aria-hidden="true" tabindex="-1"></a> [76] 5.758003e-15 5.632605e-18 6.353267e-20 1.889346e-14 5.522906e-14</span>
+<span id="cb28-17"><a href="#cb28-17" aria-hidden="true" tabindex="-1"></a> [81] 2.311298e-13 6.181156e-19 2.867141e-14 8.225237e-24 1.165322e-20</span>
+<span id="cb28-18"><a href="#cb28-18" aria-hidden="true" tabindex="-1"></a> [86] 5.787284e-21 1.805527e-13 1.792184e-22 4.119204e-21 1.364489e-17</span>
+<span id="cb28-19"><a href="#cb28-19" aria-hidden="true" tabindex="-1"></a> [91] 5.409768e-17 8.242311e-15 9.603371e-13 1.193915e-11 1.369777e-21</span>
+<span id="cb28-20"><a href="#cb28-20" aria-hidden="true" tabindex="-1"></a> [96] 1.471542e-18 5.232042e-18 1.452364e-19 1.668607e-13 6.192239e-16</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div class="sourceCode cell-code" id="cb36"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a><span class="fu">qplot</span>(p_vals2)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="fu">qplot</span>(p_vals2)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <p><img src="inferenzstatistik_files/figure-html/unnamed-chunk-16-1.png" class="img-fluid" width="768"></p>
 </div>
 </div>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb37"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sum</span>(p_vals2 <span class="sc">&gt;</span> .<span class="dv">05</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sum</span>(p_vals2 <span class="sc">&gt;</span> .<span class="dv">05</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<div class="sourceCode" id="cb38"><pre class="sourceCode txt code-with-copy"><code class="sourceCode default"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a>[1] 0</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb31"><pre class="sourceCode txt code-with-copy"><code class="sourceCode default"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a>[1] 0</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </div>
 
