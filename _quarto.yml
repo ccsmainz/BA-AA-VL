@@ -1,6 +1,8 @@
 project:
   type: book
   output-dir: docs
+  preview:
+    port: 4200
   pre-render: render.R
   resources: ["ba-aa-vl.zip", "code"]
 
@@ -25,6 +27,7 @@ bibliography: references.bib
 knitr:
   opts_chunk:
     class-output: "txt"
+    out-width: 100%
 
 execute:
   warning: false
@@ -36,8 +39,9 @@ format:
     theme: [cosmo, styles.scss]
     highlight-style: monokai
     code-overflow: wrap
-    fig-width: 5
-    fig-asp: .6
+    fig-width: 8
+    fig-asp: .618
     fig-align: center
     title-block-style: none
     toc-title-document: "Inhalt"
+    number-depth: 2
