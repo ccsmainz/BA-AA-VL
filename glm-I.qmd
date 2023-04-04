@@ -1,0 +1,76 @@
+# Das GLM I
+
+**Fragestellung:** Hängt die Präferenz für Coca Cola oder Pepsi damit zusammen, ob Personen einen Film mit Produktplatzierung von Pepsi gesehen haben?
+
+:::{.callout-tip}
+### Quelle
+Auty, S. and Lewis, C. (2004), Exploring children's choice: The reminder effect of product placement. Psychology & Marketing, 21: 697-713. <https://doi.org/10.1002/mar.20025>
+:::
+
+## Pakete und Daten laden
+
+```{r setup}
+library(tidyverse)
+theme_set(theme_minimal())
+```
+
+```{r}
+autylewis04 <- haven::read_sav("data/AutyLewis2004.sav")
+autylewis04
+```
+
+
+## Häufigkeiten und Prozentwerte in den beiden Gruppen
+
+```{r, warning=FALSE}
+autylewis04 %>%
+  group_by(pepsi_placement) %>%
+  count(pepsi_chosen)
+
+autylewis04 %>%
+  group_by(pepsi_placement) %>%
+  summarise(n = n(), m = mean(pepsi_chosen))
+```
+
+### 3. Chi-Quadrat Test
+
+```{r, warning=FALSE}
+table(autylewis04$pepsi_placement, autylewis04$pepsi_chosen) |>
+  chisq.test(correct = FALSE)
+```
+
+**Ergebnis:** Die Produktwahl hängt damit zusammmen, ob man ein Product Placement gesehen hat (Chi\^2 = 4.14, p\<.05)
+
+### 4. Bivariate Korrelation
+
+```{r, warning=FALSE}
+cor.test(autylewis04$pepsi_placement, autylewis04$pepsi_chosen)
+```
+
+***Ergebnis:*** Die Produktwahl hängt damit zusammmen, ob man ein Product Placement gesehen hat (r = .20, p\<.05)
+
+### T-Test
+
+```{r, warning=FALSE}
+t.test(pepsi_chosen ~ pepsi_placement, data = autylewis04, var.equal = TRUE)
+```
+
+***Ergebnis:*** Die Produktwahl unterscheidet sich signifikant (T= -2.06, p\<.05) zwischen Leuten, die ein Placement (M = .63) und kein Placement (M = .43) sahen.
+
+### 5. Einfaktorielle Varianzanalyse (ANOVA)
+
+```{r, warning=FALSE}
+aov(pepsi_chosen ~ pepsi_placement, data = autylewis04) |>
+  summary()
+```
+
+***Ergebnis:*** Product Placement hat einen signifikanten Einfluss (Haupteffekt) (F(1,103) = 4.23, p\<.05) auf Produktwahl.
+
+### 6. Lineare Regression
+
+```{r, warning=FALSE}
+lm(pepsi_chosen ~ pepsi_placement, data = autylewis04) |>
+  summary()
+```
+
+***Ergebnis:*** Product Placement hat einen signifikanten Einfluss (Haupteffekt) (F(1,103) = 4.23, p\<.05) auf Produktwahl. Bei Probanden, die ein Placements sahen, war die Wahrscheinlichkeit, zu Pepsi zu greifen 20% höher (b = .20, p\<.05).

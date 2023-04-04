@@ -1,0 +1,43 @@
+project:
+  type: book
+  output-dir: docs
+  pre-render: render.R
+  resources: ["ba-aa-vl.zip", "code"]
+
+book:
+  title: "Anwendungsorientierte Analyseverfahren"
+  language: "de"
+  sidebar:
+    style: floating
+    search: false
+    title: "**IfP** | Stats </br>Vorlesung Analyseverfahren"
+    description: "BA"
+
+  chapters:
+    - index.qmd
+    - intro.qmd
+    - inferenzstatistik.qmd
+    - glm-I.qmd
+    - literatur.qmd
+
+bibliography: references.bib
+
+knitr:
+  opts_chunk:
+    class-output: "txt"
+
+execute:
+  warning: false
+  message: false
+  freeze: auto
+
+format:
+  html:
+    theme: [cosmo, styles.scss]
+    highlight-style: monokai
+    code-overflow: wrap
+    fig-width: 5
+    fig-asp: .6
+    fig-align: center
+    title-block-style: none
+    toc-title-document: "Inhalt"

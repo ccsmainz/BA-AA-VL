@@ -1,0 +1,162 @@
+# Inferenzstatistik
+
+```{r, message=FALSE, warning=FALSE}
+library(tidyverse)
+theme_set(theme_minimal())
+```
+
+## Alpha-Fehler
+
+### Simulation eines T-Tests für zwei Stichproben
+
+IQ ist verteilt mit M = 100, SD = 15, Population von Mainz
+
+```{r, message=FALSE, warning=FALSE}
+iq_population <- rnorm(n = 220000, mean = 100, sd = 15)
+summary(iq_population)
+```
+
+
+
+### Wir ziehen zwei Stichproben 
+
+Stichprobe 
+
+```{r, message=FALSE, warning=FALSE}
+sample_a <- sample(iq_population, size = 20)
+summary(sample_a)
+```
+
+Stichprobe 2
+
+```{r, message=FALSE, warning=FALSE}
+sample_b <- sample(iq_population, size = 20)
+summary(sample_b)
+```
+
+## T-Test
+
+```{r, message=FALSE, warning=FALSE}
+t.test(sample_a, sample_b, var.equal = T)
+```
+
+### Wir vergleichen 100 Mal zwei 20er Stichproben und speichern den p-Wert
+
+```{r, message=FALSE, warning=FALSE}
+p_vals <- replicate(n = 100, {
+  t.test(
+    x = sample(iq_population, 20),
+    y = sample(iq_population, 20),
+    var.equal = T
+  )$p.value
+})
+
+p_vals
+qplot(p_vals)
+```
+
+**Frage 1:** Wieviele p-Werte sind signifikant (Alpha-Fehler)?
+
+```{r, message=FALSE, warning=FALSE}
+sum(p_vals <= .05)
+```
+
+**Frage 2:** Was sollte herauskommen, wenn wir statt 100 gleich 10.000 Simulationen machen?
+
+Wenn die Nullhypthoese zutrifft, ist der p-Wert eine Zufallsvariable, daher einfach gleichverteilt.
+
+```{r, message=FALSE, warning=FALSE}
+p_vals <- replicate(n = 10000, {
+  t.test(
+    x = sample(iq_population, 20),
+    y = sample(iq_population, 20),
+    var.equal = T
+  )$p.value
+})
+
+p_vals %>% head()
+qplot(p_vals)
+```
+
+```{r, message=FALSE, warning=FALSE}
+sum(p_vals <= .05)
+```
+
+**Frage 3:** Was sollte sich am Alpha-Fehler mit größeren Stichproben ändern?
+
+```{r, message=FALSE, warning=FALSE}
+p_vals <- replicate(n = 100, {
+  t.test(
+    x = sample(iq_population, 1000),
+    y = sample(iq_population, 1000),
+    var.equal = T
+  )$p.value
+})
+
+p_vals
+qplot(p_vals)
+```
+
+```{r, message=FALSE, warning=FALSE}
+sum(p_vals <= .05)
+```
+
+## Beta-Fehler
+
+### JGU-Studierende sind etwas schlauer im Schnitt
+
+```{r, message=FALSE, warning=FALSE}
+iq_jgu <- rnorm(n = 31000, mean = 110, sd = 15)
+summary(iq_jgu)
+```
+
+### Wir vergleichen 20 Studierende mit 20 anderen Mainzern
+
+```{r, message=FALSE, warning=FALSE}
+t.test(sample(iq_jgu, size = 20),
+  sample(iq_population, size = 20),
+  var.equal = T
+)
+```
+
+### Wir vergleichen 100 Mal zwei 20er Stichproben und speichern den p-Wert
+
+```{r, message=FALSE, warning=FALSE}
+p_vals2 <- replicate(n = 100, {
+  t.test(
+    x = sample(iq_jgu, 20),
+    y = sample(iq_population, 20),
+    var.equal = T
+  )$p.value
+})
+
+p_vals2
+qplot(p_vals2)
+```
+
+**Frage 1:** Wieviele p-Werte sind nicht-signifikant (Beta-Fehler)?
+
+```{r, message=FALSE, warning=FALSE}
+sum(p_vals2 > .05)
+```
+
+**Frage 2:** Was sollte sich am Beta-Fehler mit größeren Stichproben ändern?
+
+```{r, message=FALSE, warning=FALSE}
+p_vals2 <- replicate(n = 100, {
+  t.test(
+    x = sample(iq_jgu, 300),
+    y = sample(iq_population, 300),
+    var.equal = T
+  )$p.value
+})
+
+p_vals2
+qplot(p_vals2)
+```
+
+
+
+```{r, message=FALSE, warning=FALSE}
+sum(p_vals2 > .05)
+```
