@@ -1,0 +1,133 @@
+# Mittelwertvergleiche
+
+## Fragestellung {.unnumbered}
+
+Hängt die Rezeptionswahrscheinlichkeit von Nachrichten auf Facebook von der Art der Kuratierung ab?
+
+::: callout-tip
+### Quelle
+@kümpel2019
+:::
+
+## Pakete und Daten laden
+
+### Pakete laden
+
+Wenn RStudio nicht vorschlägt, die Pakete zu installieren, diese Zeile ausführen:
+
+```{r, eval = FALSE}
+install.packages(c("tidyverse", "marginaleffects"))
+```
+
+Wenn die Pakete installiert sind, werden sie wie immer geladen.
+
+```{r}
+library(tidyverse)
+library(marginaleffects)
+theme_set(theme_minimal(base_size = 12))
+```
+
+### Daten laden
+
+```{r, warning=FALSE}
+kuempel2019 <- haven::read_sav("data/Kuempel_2019.sav") |>
+  select(modus = Kurationsmodus_SNS, rw = Rezeptionswahrscheinlichkeit) |>
+  mutate(modus = as_factor(modus) |> relevel("Chronik")) |> # Faktor, Referenz Chronik
+  mutate(modus_tag = ifelse(modus == "Tag", "1 (ja)", "0 (nein)"))
+
+kuempel2019
+```
+
+## Zwei Gruppen vergleichen
+
+### Gruppenmittelwerte der Stichprobe
+
+```{r}
+kuempel2019 |>
+  group_by(modus_tag) |>
+  summarise(
+    n = n(),
+    mean_rw = mean(rw, na.rm = TRUE),
+    sd_rw = sd(rw, na.rm = TRUE)
+  )
+```
+
+### T-Test
+
+```{r, warning=FALSE}
+t.test(rw ~ modus_tag, data = kuempel2019, var.equal = TRUE)
+```
+
+### GLM
+```{r}
+model_lm1 <- lm(rw ~ modus_tag, data = kuempel2019)
+summary(model_lm1)
+```
+
+
+### Vorhergesagte Mittelwerte
+
+```{r}
+marginaleffects::avg_predictions(model_lm1, by = "modus_tag")
+```
+
+## Mehr als zwei Gruppen
+### Klassische ANOVA
+
+```{r}
+model_anova <- aov(rw ~ modus, kuempel2019)
+summary(model_anova)
+```
+
+### Vorhergesagte Mittelwerte und paarweise Kontraste
+
+```{r}
+marginaleffects::avg_predictions(model_anova, by = "modus")
+```
+
+```{r}
+marginaleffects::avg_comparisons(model_anova,
+  variables = list(modus = "pairwise"),
+  p_adjust = "hochberg"
+)
+```
+
+### GLM statt ANOVA
+
+```{r}
+model_lm2 <- lm(rw ~ modus, kuempel2019)
+summary(model_lm2)
+```
+
+### Nochmal vorhergesagte Mittelwerte und Kontraste
+
+```{r}
+marginaleffects::avg_predictions(model_lm2, by = "modus")
+```
+
+```{r}
+marginaleffects::avg_comparisons(model_lm2,
+  variables = list(modus = "pairwise"),
+  p_adjust = "bonferroni"
+)
+```
+
+## Bonus: Visualisierung
+
+```{r}
+marginaleffects::avg_predictions(model_lm2, by = "modus") |>
+  as_tibble() |>
+  ggplot(aes(
+    x = modus, y = estimate, ymin = conf.low, ymax = conf.high
+  )) +
+  geom_pointrange() +
+  coord_cartesian(ylim = c(1, 5)) +
+  labs(
+    x = "Kurationsmodus",
+    y = "Rezeptionswahrscheinlichkeit",
+    title = "Vorhergesagte Rezeptionswahrscheinlichkeit nach Kurationsmodus"
+  )
+```
+
+## Fazit {.unnumbered}
+

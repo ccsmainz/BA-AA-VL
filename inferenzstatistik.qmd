@@ -1,5 +1,9 @@
 # Inferenzstatistik
 
+```{r, include = F}
+set.seed(123)
+```
+
 ```{r, message=FALSE, warning=FALSE}
 library(tidyverse)
 theme_set(theme_minimal())
@@ -7,7 +11,7 @@ theme_set(theme_minimal())
 
 ## Alpha-Fehler
 
-### Simulation eines T-Tests für zwei Stichproben
+### Simulation der Grundgesamtheit
 
 IQ ist verteilt mit M = 100, SD = 15, Population von Mainz
 
@@ -18,32 +22,34 @@ summary(iq_population)
 
 
 
-### Wir ziehen zwei Stichproben 
+### Zwei Stichproben aus derselben Grundgesamtheit
 
-Stichprobe 
+Stichprobe A
 
 ```{r, message=FALSE, warning=FALSE}
 sample_a <- sample(iq_population, size = 20)
 summary(sample_a)
 ```
 
-Stichprobe 2
+Stichprobe B
 
 ```{r, message=FALSE, warning=FALSE}
 sample_b <- sample(iq_population, size = 20)
 summary(sample_b)
 ```
 
-## T-Test
+### Ein einzelner T-Test
 
 ```{r, message=FALSE, warning=FALSE}
 t.test(sample_a, sample_b, var.equal = T)
 ```
 
-### Wir vergleichen 100 Mal zwei 20er Stichproben und speichern den p-Wert
+### Simulation von 1000 T-Tests
+
+Wir vergleichen 1000 Mal zwei 20er Stichproben per T-Test und speichern die entstandenen 1000 p-Werte als `p_vals` ab.
 
 ```{r, message=FALSE, warning=FALSE}
-p_vals <- replicate(n = 100, {
+p_vals <- replicate(n = 1000, {
   t.test(
     x = sample(iq_population, 20),
     y = sample(iq_population, 20),
@@ -51,54 +57,41 @@ p_vals <- replicate(n = 100, {
   )$p.value
 })
 
-p_vals
+head(p_vals)
+```
+
+```{r}
+#| fig-cap: "Histogranm von 1000 p-Werten aus der Simulation"
 qplot(p_vals)
 ```
 
-**Frage 1:** Wieviele p-Werte sind signifikant (Alpha-Fehler)?
+### Fragen zum Alpha-Fehler
+
+**Frage 1:** Wieviele p-Werte sollten signifikant sein (Alpha-Fehler)?
+
+**Antwort:** Bei einem $\alpha$-Niveau von 0.05 sollten es ungefähr 50 von 1000 sein.
 
 ```{r, message=FALSE, warning=FALSE}
 sum(p_vals <= .05)
 ```
 
-**Frage 2:** Was sollte herauskommen, wenn wir statt 100 gleich 10.000 Simulationen machen?
-
-Wenn die Nullhypthoese zutrifft, ist der p-Wert eine Zufallsvariable, daher einfach gleichverteilt.
+**Frage 2:** Was sollte sich am Alpha-Fehler mit größeren Stichproben ändern?
 
 ```{r, message=FALSE, warning=FALSE}
-p_vals <- replicate(n = 10000, {
-  t.test(
-    x = sample(iq_population, 20),
-    y = sample(iq_population, 20),
-    var.equal = T
-  )$p.value
-})
-
-p_vals %>% head()
-qplot(p_vals)
-```
-
-```{r, message=FALSE, warning=FALSE}
-sum(p_vals <= .05)
-```
-
-**Frage 3:** Was sollte sich am Alpha-Fehler mit größeren Stichproben ändern?
-
-```{r, message=FALSE, warning=FALSE}
-p_vals <- replicate(n = 100, {
+p_vals_1000 <- replicate(n = 1000, {
   t.test(
     x = sample(iq_population, 1000),
     y = sample(iq_population, 1000),
     var.equal = T
   )$p.value
 })
-
-p_vals
-qplot(p_vals)
+qplot(p_vals_1000)
 ```
 
+**Antwort:** Nichts. Der Alpha-Fehler ist unabhängig von der Größe der gezogenen Stichproben.
+
 ```{r, message=FALSE, warning=FALSE}
-sum(p_vals <= .05)
+sum(p_vals_1000 <= .05)
 ```
 
 ## Beta-Fehler
@@ -160,3 +153,5 @@ qplot(p_vals2)
 ```{r, message=FALSE, warning=FALSE}
 sum(p_vals2 > .05)
 ```
+
+
