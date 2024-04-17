@@ -1,0 +1,73 @@
+# Modellannahmen
+::: {.callout-tip collapse="true" appearance="minimal" .hidden}
+## Folien
+
+```{r, purl=F, echo=F}
+xaringanExtra::embed_xaringan(
+  url = "f/02-GLM.html#/title-slide",
+  ratio = "16:9",
+  border = F
+)
+```
+:::
+
+### Beispielanalyse {.unnumbered}
+
+Welche Variablen sagen politisches Wissen voraus?
+
+::: callout-tip
+### Quelle
+@van-erkelvan-aelst2021
+:::
+
+## Pakete und Daten laden
+
+Wir laden die üblichen Paket sowie das `performance`-Paket, dass viele Funktionen zur Prüfung von Modellannahmen und Modellgüte enthält. Dieses erfordert zusätzlich `see` für die Visualisierung der Checks. Wir verwenden denselben Datensatz wie in der letzten Übung.
+
+```{r}
+library(performance)
+library(see)
+library(report)
+library(tidyverse)
+theme_set(theme_minimal())
+```
+
+```{r}
+vanerkel21 <- haven::read_sav("data/Vanerkel_Vanaelst_2021.sav") %>%
+  mutate(
+    Education = as_factor(Education),
+    Gender = as_factor(Gender)
+  ) |>
+  haven::zap_labels()
+
+vanerkel21
+```
+
+## Regressionsmodell
+
+Ausgangspunkt ist eine multiple Regression, in der wieder politisches Wissen durch soziodemographische Prädiktoren sowie politisches Interesse erklärt wird.
+
+```{r}
+m1 <- lm(PK ~ Gender + Age + Education + Political_interest, data = vanerkel21)
+report::report_table(m1)
+```
+
+Das Modell kann rund ein Drittel der Varianz in politischem Wissen erklären. Politisches Interesse, hohe Bildung und Geschlecht haben den stärksten Zusammenhang mit dem Wissen.
+
+## Annahmen
+
+Für die Prüfung der klassischen OLS-Annahmen wie Linearität, Normalverteilung der Residuen, Homoskedastizität und Multikollinearität gibt es im `performance`-Paket eine Sammelfunktion, die schlicht `check_model()` heißt. Die Ergebnisse lassen sich über die `plot()` Funktion als Reihe von Grafiken samt Erklärungen ausgeben.
+
+```{r}
+checks <- performance::check_model(m1, panel = F)
+plot(checks)
+```
+
+Über die Hilfe-Funktion in R bekommen wir ausführliche Hinweise zur Interpretation der einzelnen Tests und Plots.
+
+```{r, eval = F}
+?performance::check_model
+```
+
+
+

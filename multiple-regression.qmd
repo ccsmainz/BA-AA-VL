@@ -1,0 +1,93 @@
+# Multiple Regression
+::: {.callout-tip collapse="true" appearance="minimal" .hidden}
+## Folien
+
+```{r, purl=F, echo=F}
+xaringanExtra::embed_xaringan(
+  url = "f/02-GLM.html#/title-slide",
+  ratio = "16:9",
+  border = F
+)
+```
+:::
+
+### Beispielanalyse {.unnumbered}
+
+Welche Variablen sagen politisches Wissen voraus?
+
+::: callout-tip
+### Quelle
+@van-erkelvan-aelst2021
+:::
+
+## Pakete und Daten laden
+
+Zunächst laden wir die üblichen R-Pakete sowie die Daten von van Erkel & van Aelst (2021).
+
+```{r}
+library(report)
+library(tidyverse)
+theme_set(theme_minimal())
+```
+
+Wir wandeln die Variablen `Eduction` und `Gender` in kategorielle Variablen (factor) um, damit R deren Ausprägungen nicht als Zahlenwerte interpretiert.
+
+```{r}
+vanerkel21 <- haven::read_sav("data/Vanerkel_Vanaelst_2021.sav") %>%
+  mutate(
+    Education = as_factor(Education),
+    Gender = as_factor(Gender)
+  ) |>
+  haven::zap_labels()
+
+vanerkel21
+```
+
+Die relevante Outcome-Variable ist politisches Wissen `PK`, die wir nachfolgend genauer betrachten.
+
+## Deskriptive Statistik
+
+```{r}
+vanerkel21 |>
+  select(PK) |>
+  report::report_table()
+```
+
+```{r}
+vanerkel21 |>
+  ggplot(aes(x = PK)) +
+  geom_histogram()
+```
+
+
+## Modell 1: Nur Soziodemographie
+
+Das erste Regressionsmodell enthält nur die soziodemographischen Variablen Geschlecht, Alter und Bildung.
+
+```{r}
+m1_socdem <- lm(PK ~ Gender + Age + Education, data = vanerkel21)
+report::report_table(m1_socdem)
+```
+
+Alle Variablen sagen statistisch signifikant politisches Wissen voraus, und dies auch mit z.T. großen Effektstärken. Männliche und weibliche Befragte unterscheiden sich um einen dreiviertel Skalenpunkt, und auch die Unterschiede der mittleren und hohen Bildungsgruppe zu den Niedriggebildeten fallen sehr groß aus. Wegen der nicht-zentrierten Altersvariable lässt sich der Intercept-Term nicht sinnvoll interpretieren. Die Varianzaufklärung des Modells ist mit .20 relativ hoch.
+
+## Modell 2: plus Mediennutzung
+
+Im zweiten Modell fügen wir die Mediennutzungsvariablen hinzu.
+
+```{r}
+m2_media <- lm(PK ~ TV + Newspaper + Websites + Facebook + Twitter +
+  Gender + Age + Education, data = vanerkel21)
+report::report_table(m2_media)
+```
+Die Regressionskoeffizienten der Mediennutzungsvariablen sind alle positiv und statistisch signifikant (mit Ausnahme von Twitter), aber etwas kleiner als die soziodemographischen Variablen. Das adjustierte $R^2$ ist auf .28 gestiegen.
+
+## Modellvergleich
+
+Ob Modell 2 signifikant mehr Varianz im politischen Wissen erklären kann als Modell 1, zeigt der partielle F-Test, der mit der `anova()`-Funktion durchgeführt wird. Funktionsargumente sind die beiden Modelle, die verglichen werden sollen.
+
+```{r}
+anova(m1_socdem, m2_media)
+```
+
+Die Residualvarianz von Modell 2 ist signifikant kleiner, bzw. die erklärte Varianz signifikant größer als bei Modell 1. Das Hinzunehmen der Mediennutzungsvariablen hat die Modellgüte also gesteigert.

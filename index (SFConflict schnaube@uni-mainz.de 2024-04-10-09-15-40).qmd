@@ -6,9 +6,7 @@ In dieser Vorlesung werden vor allem das GLM und Regressionsmodelle behandelt.
 
 ## Folien zur Einführung
 
-::: {.callout-tip collapse="true"}
-## Folien SoSe 2024
-
+::: {.callout-tip collapse="true" appearance="minimal"}
 ```{r, purl=F, echo=F}
 xaringanExtra::embed_xaringan(
   url = "f/01-Einfuehrung.html#/title-slide",

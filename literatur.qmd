@@ -1,3 +1,15 @@
 # Literatur {.unnumbered}
 
-@auty2004
+@autylewis2004
+
+@fahnrichvogelgesang2020
+
+@festlscharkow2013
+
+@johannesdienlin2022
+
+@kumpel2019
+
+@van-erkelvan-aelst2021
+
+@vogelebachl2017

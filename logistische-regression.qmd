@@ -1,0 +1,128 @@
+# Logistische Regression
+::: {.callout-tip collapse="true" appearance="minimal" .hidden}
+## Folien
+
+```{r, purl=F, echo=F}
+xaringanExtra::embed_xaringan(
+  url = "f/02-GLM.html#/title-slide",
+  ratio = "16:9",
+  border = F
+)
+```
+:::
+
+### Beispielanalyse {.unnumbered}
+
+Was sagt vorher, wer Opfer von Cybermobbing wird?
+
+:::{.callout-tip}
+### Quelle
+@festlscharkow2013
+:::
+
+## Pakete und Daten laden
+
+```{r, include = F}
+library(marginaleffects)
+library(report)
+library(tidyverse)
+theme_set(theme_minimal())
+```
+
+```{r}
+festl13 <- haven::read_sav("data/Festl13.sav") %>%
+  mutate(gender = as_factor(gender)) |>
+  haven::zap_labels()
+festl13
+```
+
+## Deskriptivstatistik
+
+```{r}
+festl13 |>
+  select(cbvictim_gen) |>
+  report::report_table()
+```
+
+## Nullmodell
+
+```{r}
+m0 <- glm(cbvictim_gen ~ 1, data = festl13, family = binomial)
+report::report_table(m0)
+```
+
+
+```{r}
+plogis(-2.14)
+```
+
+
+## Bivariate logistische Regression
+### Prädiktor Geschlecht
+
+```{r}
+m1_gender <- glm(cbvictim_gen ~ gender, festl13, family = binomial(link = "logit"))
+report::report_table(m1_gender)
+```
+
+### Average Marginal Effects
+
+```{r}
+marginaleffects::avg_comparisons(m1_gender) |>
+  as_tibble()
+```
+
+### Vorhergesagte Wahrscheinlichkeiten
+
+```{r}
+preds_gender <- marginaleffects::avg_predictions(m1_gender, variables = "gender") |>
+  as_tibble()
+preds_gender
+```
+
+### Visualisierte Vorhersagen
+
+```{r}
+preds_gender %>%
+  ggplot(aes(x = gender, y = estimate, ymin = conf.low, ymax = conf.high)) +
+  geom_pointrange() +
+  labs(y = "Predicted Probability of Cybervictimization", x = "Gender")
+```
+
+## Multiple logistische Regression
+### Prädiktoren Geschlecht und Internetnutzung
+
+```{r}
+m2_gender_internet <- glm(cbvictim_gen ~ gender + internetuse, data = festl13, family = binomial)
+report_table(m2_gender_internet)
+```
+
+### Average Marginal Effects
+
+```{r}
+marginaleffects::avg_comparisons(m2_gender_internet) |>
+  as_tibble()
+```
+
+### Vorhergesagte Wahrscheinlichkeiten
+
+```{r}
+preds_internet <- marginaleffects::avg_predictions(m2_gender_internet, variables = c("internetuse")) |>
+  as_tibble()
+preds_internet
+```
+
+### Visualisierte Vorhersagen
+
+```{r}
+preds_internet |>
+  ggplot(aes(
+    x = internetuse, y = estimate, ymin = conf.low, ymax = conf.high
+  )) +
+  geom_line() +
+  geom_ribbon(alpha = .1) +
+  labs(
+    x = "Internet use (hours/day)",
+    y = "Predicted probability of Cybervictimization",
+  )
+```

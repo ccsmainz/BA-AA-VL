@@ -1,0 +1,175 @@
+# Moderationsanalyse
+::: {.callout-tip collapse="true" appearance="minimal" .hidden}
+## Folien
+
+```{r, purl=F, echo=F}
+xaringanExtra::embed_xaringan(
+  url = "f/02-GLM.html#/title-slide",
+  ratio = "16:9",
+  border = F
+)
+```
+:::
+
+### Beispielanalyse {.unnumbered}
+
+Wie wirkt der Dialekt von Politikern auf deren Bewertung?
+
+:::{.callout-tip}
+### Quelle
+@vogelebachl2017
+:::
+
+## Pakete und Daten laden
+
+```{r setup}
+library(marginaleffects)
+library(report)
+library(tidyverse)
+theme_set(theme_minimal())
+```
+
+```{r}
+vb2017 <- haven::read_sav("data/Voegele_Bachl_2017.sav") |>
+  mutate(geschlecht_w = ifelse(Geschlecht == 1, 1, 0)) |>
+  haven::zap_labels()
+```
+
+## Deskriptivstatistik
+
+```{r}
+vb2017 |>
+  select(gesamt) |>
+  report::report_table()
+```
+
+
+```{r}
+vb2017 |>
+  ggplot(aes(x = gesamt)) +
+  geom_histogram()
+```
+
+
+
+## Interaktion mit kategorieller Moderatorvariable
+
+### Unkonditionales Modell
+
+```{r}
+lm(gesamt ~ schwab + geschlecht_w, data = vb2017) |>
+  report::report_table()
+```
+
+### Geschlecht als Moderator
+
+```{r}
+m1_geschlecht <- lm(gesamt ~ schwab + geschlecht_w + schwab:geschlecht_w, data = vb2017)
+report::report_table(m1_geschlecht)
+```
+
+### Haupteffekte (average marginal effects)
+
+```{r}
+marginaleffects::avg_slopes(m1_geschlecht) |>
+  as_tibble()
+```
+
+
+### Konditionale Effekte für Dialekt in Abhängigkeit von Geschlecht
+
+```{r}
+marginaleffects::avg_slopes(m1_geschlecht, variable = "schwab", by = "geschlecht_w") |>
+  as_tibble()
+```
+
+
+### Modellvorhersagen (Dialekt und Geschlecht)
+
+```{r}
+preds_schwab_geschlecht <- marginaleffects::avg_predictions(m1_geschlecht, variables = c("schwab", "geschlecht_w")) |>
+  as_tibble()
+preds_schwab_geschlecht
+```
+
+### Visualisierung der Vorhersagen
+
+```{r}
+preds_schwab_geschlecht |>
+  mutate(schwab = factor(schwab), geschlecht_w = factor(geschlecht_w)) |>
+  ggplot(aes(
+    x = schwab, y = estimate, group = geschlecht_w,
+    color = geschlecht_w, ymin = conf.low, ymax = conf.high
+  )) +
+  geom_pointrange(position = position_dodge(.5)) +
+  scale_x_discrete(labels = c("Hochdeutsch", "Dialekt")) +
+  scale_color_discrete(labels = c("männlich", "weiblich")) +
+  labs(
+    y = "Gesamtbewertung (vorhergesagt)",
+    x = "Versuchsbedingung",
+    color = "Geschlecht der ProbandInnen"
+  )
+```
+
+## Interaktion mit metrischer Moderatorvariable
+
+In der Formel \* statt + für automatische Interaktionseffekte
+
+```{r}
+m2 <- lm(gesamt ~ schwab * atol, data = vb2017)
+report::report_table(m2)
+```
+
+### Haupteffekte (average marginal effects)
+
+```{r}
+marginaleffects::avg_slopes(m2) |>
+  as_tibble()
+```
+
+### Konditionale Effekte durch Zentrieren
+
+```{r}
+lm(gesamt ~ schwab * I(atol - 1), data = vb2017) |> # atol = 1
+  report_table()
+```
+
+```{r}
+lm(gesamt ~ schwab * I(atol - 5), data = vb2017) |> # atol = 5
+  report_table()
+```
+
+### Conditional effects plot
+
+```{r}
+marginaleffects::plot_cme(m2, variables = "schwab", condition = "atol") +
+  labs(x = "ATOL Score", y = "Effekt von Dialekt auf Bewertung") +
+  geom_hline(yintercept = 0, linetype = "dashed")
+```
+
+
+### Modellvorhersagen (Dialekt und 3 Level von ATOL)
+
+```{r}
+preds_schwab_atol <- marginaleffects::avg_predictions(m2, variables = list("schwab" = 0:1, "atol" = c(1, 3, 5))) |>
+  as_tibble()
+preds_schwab_atol
+```
+
+
+### Visualisierung der Vorhersagen
+
+```{r}
+preds_schwab_atol |>
+  mutate(atol = factor(atol, labels = c("niedrig (1)", "mittel (3)", "hoch (5)"))) |>
+  ggplot(aes(
+    x = factor(schwab), y = estimate, ymin = conf.low, ymax = conf.high,
+    group = atol, color = atol,
+  )) +
+  geom_pointrange(position = position_dodge(.33)) +
+  geom_line(position = position_dodge(.33)) +
+  scale_x_discrete(labels = c("Hochdeutsch", "Dialekt")) +
+  labs(y = "Gesamtbewertung (vorhergesagt)", x = "Dialekt", color = "ATOL Score")
+```
+
+

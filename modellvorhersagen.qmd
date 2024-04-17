@@ -1,0 +1,191 @@
+# Modellvorhersagen
+::: {.callout-tip collapse="true" appearance="minimal" .hidden}
+## Folien
+
+```{r, purl=F, echo=F}
+xaringanExtra::embed_xaringan(
+  url = "f/02-GLM.html#/title-slide",
+  ratio = "16:9",
+  border = F
+)
+```
+:::
+
+### Beispielanalyse {.unnumbered}
+
+Welche Variablen sagen politisches Wissen voraus?
+
+::: callout-tip
+### Quelle
+@van-erkelvan-aelst2021
+:::
+
+## Pakete und Daten laden
+
+Wir laden die üblichen Pakete und die Daten von van Erkel & van Aelst (2021). Wichtig für diese Übung ist vor allem das `marginaleffects`-Paket.
+
+
+```{r}
+library(marginaleffects)
+library(report)
+library(tidyverse)
+theme_set(theme_minimal())
+```
+
+```{r}
+vanerkel21 <- haven::read_sav("data/Vanerkel_Vanaelst_2021.sav") %>%
+  mutate(
+    Education = as_factor(Education),
+    Gender = as_factor(Gender)
+  ) |>
+  haven::zap_labels()
+
+vanerkel21
+```
+
+## Regressionsmodell
+
+Als Ausgangspunkt nehmen wir dasselbe Modell wie in der vorangegangen Übung.
+
+```{r}
+m1 <- lm(PK ~ Gender + Age + Education + Political_interest, data = vanerkel21)
+report::report_table(m1)
+```
+
+
+## Modellvorhersagen mit kategoriellem Prädiktor
+
+### Vorhersagen nach Geschlecht
+
+Um aus Regressionsmodellen in R Vorhersagen zu generieren, gibt es die eingebaute `predict()`-Funktion, die aber im Umgang etwas mühsam ist. Mit der Funktion  `avg_predictions()` aus dem `marginaleffects`-Paket erhalten wir für eine oder mehrere Prädiktorvariablen vorhergesagte Werte des Outcomes. Dabei werden für kategorielle Variablen die Vorhersagen für jede Ausprägung aggregiert, für metrische über (typische) Einzelwerte. Wir speichern die Vorhersagen im Tibble `preds_gender` (preds = predictions).
+
+```{r}
+preds_gender <- marginaleffects::avg_predictions(m1, variables = "Gender") |>
+  as_tibble()
+preds_gender
+```
+
+Für die weiblichen Befragten wird ein Wert von 2,78 für politisches Wissen durch das Modell vorhergesagt (Spalte `estimate`), für männliche Befragte ein höherer Wert von 3,29. Die Differenz entspricht dem Regressionskoeffizienten für die Geschlechtsvariable B = -0.51 (siehe Regressionstabelle oben). Für die Vorhersagen erhalten wir zusätzlich auch ein 95%-Konfidenzintervall (Spalten `conf.low` und `conf.high`).
+
+### Visualisierung nach Geschlecht
+
+Da die `avg_predictions()`-Funktion einen Tibble zurückliefert, können wir diesen direkt als Daten für eine ggplot Grafik verwenden. Wir legen die Geschlechtsvariable auf die X-Achse, die vorhergesagten Werte samt Unter- und Obergrenze auf die Y-Achse. Mit `geom_pointrange()` werden die Punktschätzer und Konfidenzintervalle dargestellt.
+
+```{r}
+preds_gender |>
+  ggplot(aes(x = Gender, y = estimate, ymin = conf.low, ymax = conf.high)) +
+  geom_pointrange() +
+  labs(x = "Gender", y = "Predicted political knowledge")
+```
+
+Da sich die Konfidenzintervalle nicht überschneiden, können wir sofort sagen, dass der Unterschied zwischen männlichen und weiblichen Befragten hinsichtlich politischem Wissen statistisch signifikant ist, auch unter Kontrolle von Bilder, Alter und pol. Interesse.
+
+## Modellvorhersagen mit mehreren kategoriellen Prädiktoren
+
+Statt über eine können wir die Vorhersagen auch über mehrere Prädiktorvariablen aggregieren, hier über Geschlecht und Bildung. 
+
+```{r}
+preds_gender_edu <- marginaleffects::avg_predictions(m1, variables = c("Gender", "Education")) |>
+  as_tibble()
+preds_gender_edu
+```
+
+Der daraus resultierenden Datensatz hat 2 (Geschlecht) x 3 (Bildung) = 6 Zeilen für alle Kombinationen der Variablen.
+
+### Visualisierung nach Geschlecht und Bildung
+
+Wie oben visualisieren wir die Vorhersagen mit `geom_pointrange()`, diesmal allerdings gruppiert und farblich unterschieden nach den drei Bildungsgruppen. Mit dem `position_dodge(.5)`-Argument werden die Punkte+Intervalle etwas versetzt statt direkt übereinander dargestellt.
+
+```{r}
+preds_gender_edu |>
+  ggplot(aes(
+    x = Gender, y = estimate, ymin = conf.low, ymax = conf.high,
+    group = Education, color = Education
+  )) +
+  geom_pointrange(position = position_dodge(.5)) +
+  labs(x = "Gender", y = "Predicted political knowledge")
+```
+
+Da das Regressionsmodell nur die Haupteffekte von Bildung und Geschlecht enthält, aber nicht deren Interaktionseffekt (siehe die Sitzung zu [Moderationsanalyse](moderation.html)), sind die Abstände in den Vorhersagen zwischen den Bildungsgruppen bei Männern und Frauen gleich (bzw. die Abstände zwischen Männern und Frauen pro Bildungsgruppe).
+
+## Modellvorhersagen mit metrischem Prädiktor
+### Vorhersage nach Alter
+
+Für metrische Variablen ist der Code identisch, die Funktion `avg_predictions()` erkennt selbständig, ob es sich um metrische oder kategorielle Variablen handelt. Bei metrischen Prädiktoren werden standardmäßig fünf typische Werte ausgewählt.
+
+
+```{r}
+preds_age <- marginaleffects::avg_predictions(m1, variables = "Age") |>
+  as_tibble()
+preds_age
+```
+
+Warum genau diese Werte für Alter? Dies sind die "five numbers" nach Tukey, die auch für die Visualisierung von Boxplots verwendet werden: Minium, erstes Quartil, Median, drittes Quartil, Maximum. Diese kann man in R mit der Funktion `fivenum()` erhalten.
+
+```{r}
+fivenum(vanerkel21$Age)
+```
+
+### Vorhersage mit spezifischen Werten
+
+Wollen wir Vorhersagen für andere Werte der Altersvariable erhalten, müssen wir den Funktionsaufruf leicht modifizieren. Das `variables`-Argument ist nun eine benannte Liste. Hier wollen wir statt `fivenum` die eingebaute `threenum` Variante, d.h. Mittelwert plus/minus 1 SD. Weitere Beispiele finden sich in der Hilfe für `avg_predictions()`.
+
+
+```{r}
+marginaleffects::avg_predictions(m1, variables = list("Age" = "threenum")) |>
+  as_tibble()
+```
+
+Zu guter letzt können wir auch direkt sagen, für welche Werte für Vorhersagen erhalten wollen, wir übergeben einfach einen Zahlenvektor, hier für die Werte 18, 40 und 65.
+
+```{r}
+marginaleffects::avg_predictions(m1, variables = list("Age" = c(18, 40, 65))) |>
+  as_tibble()
+```
+
+### Visualisierung nach Alter
+
+Die Vorhersagen für metrische Prädiktoren lassen sich am besten als Regressionsgerade samt Konfidenzband visualisieren, d.h. `geom_line()` und `geom_ribbon()`. Das Konfidenzband wird fast transparent dargestellt (`alpha = .1`). Auf der X-Achse ist wieder die Prädiktorvariable, auf der Y-Achse die vorhergesagten Werte.
+
+
+```{r}
+preds_age |>
+  ggplot(aes(
+    x = Age, y = estimate, ymin = conf.low, ymax = conf.high
+  )) +
+  geom_ribbon(alpha = .1) +
+  geom_line() +
+  labs(x = "Age", y = "Predicted political knowledge")
+```
+
+Dies entspricht auch dem, was wir mit `geom_smooth()` in der ersten Übung zur Regression gesehen haben.
+
+## Modellvorhersagen mit kategoriellen und metrischen Prädiktoren
+
+### Vorhersagen nach Alter und Geschlecht
+
+Zuletzt kombinieren wir die Vorhersagen für Alter und Geschlecht.
+
+```{r}
+preds_age_gender <- marginaleffects::avg_predictions(m1, variables = c("Age", "Gender")) |>
+  as_tibble()
+preds_age_gender
+```
+Wir erhalten einen Datensatz mit 5 (Alter) x 2 (Geschlecht) = 10 Zeilen.
+
+### Visualisierung nach Alter und Geschlecht
+
+Der Plot ist grundsätzlich mit demjenigen für Alter identisch, wir fügen lediglich die aesthetics für Farbe und Füllung nach Geschlecht hinzu.
+
+```{r}
+preds_age_gender |>
+  ggplot(aes(
+    x = Age, y = estimate, ymin = conf.low, ymax = conf.high,
+    group = Gender, fill = Gender, color = Gender
+  )) +
+  geom_ribbon(alpha = .1, color = NA) +
+  geom_line() +
+  labs(x = "Age", y = "Predicted political knowledge")
+```
+
+Da wieder nur die Haupteffekte von Alter und Geschlecht um Modell enthalten sind, sehen wir zwei parallele Regressionsgeraden, d.h. der Alterseffekt ist bei Männern und Frauen gleich, aber die Achsenabschnitte unterscheiden sich. Das wird in der Übung zur [Moderationsanalyse](moderation.html) anders aussehen.

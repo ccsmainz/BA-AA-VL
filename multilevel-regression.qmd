@@ -1,0 +1,157 @@
+# Multilevel-Regression
+::: {.callout-tip collapse="true" appearance="minimal" .hidden}
+## Folien
+
+```{r, purl=F, echo=F}
+xaringanExtra::embed_xaringan(
+  url = "f/02-GLM.html#/title-slide",
+  ratio = "16:9",
+  border = F
+)
+```
+:::
+
+### Beispielanalyse {.unnumbered}
+
+Welche Facebook-Posts von Universitäten werden am meisten kommentiert?
+
+:::{.callout-tip}
+### Quelle
+@fahnrichvogelgesang2020
+:::
+
+
+## Pakete und Daten laden
+
+```{r, include = F}
+library(lme4)
+library(performance)
+library(marginaleffects)
+library(report)
+library(tidyverse)
+theme_set(theme_minimal())
+```
+
+```{r}
+faehnrich19 <- haven::read_sav("data/Faehnrich_2020.sav") |>
+  haven::zap_labels()
+faehnrich19
+```
+
+# Datenbeschreibung
+
+```{r}
+count(faehnrich19, uni)
+```
+
+```{r}
+faehnrich19 |>
+  select(comments_count) |>
+  report::report_table()
+```
+
+```{r}
+faehnrich19 |>
+  ggplot(aes(x = comments_count)) +
+  geom_histogram()
+```
+
+
+## Nullmodell und ICC
+
+```{r}
+m0 <- lmer(comments_count ~ 1 + (1 | uni), data = faehnrich19)
+report_table(m0)
+```
+
+## ICC
+
+```{r}
+16.71^2 / (16.71^2 + 33.32^2)
+```
+
+
+```{r}
+performance::icc(m0)
+```
+
+### Vorausgesagte Mittelwerte (inkl. varying intercepts)
+
+```{r}
+preds_uni <- marginaleffects::avg_predictions(m0, variables = "uni") |>
+  as_tibble()
+preds_uni
+```
+
+## Modell mit Varying Intercepts 
+### Lineares Modell mit varying intercepts
+
+```{r}
+m1_research <- lmer(comments_count ~ 1 + topic_research + (1 | uni), data = faehnrich19)
+report::report_table(m1_research)
+```
+
+### Modellvorhersagen
+
+```{r}
+preds_uni <- avg_predictions(m1_research, variables = c("topic_research", "uni")) |>
+  as_tibble()
+preds_uni
+```
+
+### Visualisierung der Vorhersagen
+
+```{r}
+preds_uni |>
+  ggplot(aes(x = factor(topic_research), y = estimate, color = uni, group = uni)) +
+  geom_line(show.legend = FALSE) +
+  geom_point(show.legend = FALSE) +
+  labs(x = "Topic Research", y = "Predicted comments")
+```
+
+## Modell mit Varying Intercepts und Slopes
+
+### Varying slopes für Thema Forschung
+
+```{r}
+m2_research_vs <- lmer(comments_count ~ 1 + topic_research + (1 + topic_research | uni), data = faehnrich19)
+report::report_table(m2_research_vs)
+```
+
+### Modellvergleich Fixed vs. Varying Slopes
+
+```{r}
+anova(m1_research, m2_research_vs)
+```
+
+### Varying slopes pro Uni
+
+```{r}
+marginaleffects::avg_slopes(m2_research_vs, by = "uni") |>
+  as_tibble()
+```
+### Modellvorhersagen
+
+```{r}
+preds_uni_vs <- avg_predictions(m2_research_vs, variables = c("topic_research", "uni")) |>
+  as_tibble()
+preds_uni_vs
+```
+
+### Visualisierung der Vorhersagen
+
+```{r}
+preds_uni_vs |>
+  ggplot(aes(x = factor(topic_research), y = estimate, color = uni, group = uni)) +
+  geom_line(show.legend = FALSE) +
+  geom_point(show.legend = FALSE) +
+  labs(x = "Topic Research", y = "Predicted comments")
+```
+
+
+## Modell mit Level-2-Prädiktor
+
+```{r}
+m3_research_fans <- lmer(comments_count ~ 1 + topic_research + uni_fans + (1 + topic_research | uni), data = faehnrich19)
+report::report_table(m3_research_fans)
+```
