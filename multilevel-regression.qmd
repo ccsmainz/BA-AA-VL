@@ -38,7 +38,7 @@ faehnrich19 <- haven::read_sav("data/Faehnrich_2020.sav") |>
 faehnrich19
 ```
 
-# Datenbeschreibung
+## Deskriptivstatistik
 
 ```{r}
 count(faehnrich19, uni)
@@ -64,7 +64,7 @@ m0 <- lmer(comments_count ~ 1 + (1 | uni), data = faehnrich19)
 report_table(m0)
 ```
 
-## ICC
+### ICC
 
 ```{r}
 16.71^2 / (16.71^2 + 33.32^2)
@@ -75,7 +75,7 @@ report_table(m0)
 performance::icc(m0)
 ```
 
-### Vorausgesagte Mittelwerte (inkl. varying intercepts)
+### Vorausgesagte Mittelwerte (inkl. Varying Intercepts )
 
 ```{r}
 preds_uni <- marginaleffects::avg_predictions(m0, variables = "uni") |>
@@ -84,7 +84,7 @@ preds_uni
 ```
 
 ## Modell mit Varying Intercepts 
-### Lineares Modell mit varying intercepts
+### Lineares Modell mit Varying Intercepts 
 
 ```{r}
 m1_research <- lmer(comments_count ~ 1 + topic_research + (1 | uni), data = faehnrich19)
