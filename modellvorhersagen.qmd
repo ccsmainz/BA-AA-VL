@@ -25,7 +25,7 @@ Welche Variablen sagen politisches Wissen voraus?
 Wir laden die üblichen Pakete und die Daten von van Erkel & van Aelst (2021). Wichtig für diese Übung ist vor allem das `marginaleffects`-Paket.
 
 
-```{r}
+```{r, message=FALSE, warning=FALSE}
 library(marginaleffects)
 library(report)
 library(tidyverse)
@@ -33,7 +33,7 @@ theme_set(theme_minimal())
 ```
 
 ```{r}
-vanerkel21 <- haven::read_sav("data/Vanerkel_Vanaelst_2021.sav") %>%
+vanerkel21 <- haven::read_sav("data/Vanerkel_Vanaelst_2021.sav") |>
   mutate(
     Education = as_factor(Education),
     Gender = as_factor(Gender)

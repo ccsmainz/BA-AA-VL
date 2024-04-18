@@ -23,7 +23,7 @@ Welche Facebook-Posts von Universitäten werden am meisten kommentiert?
 
 ## Pakete und Daten laden
 
-```{r, include = F}
+```{r, message=FALSE, warning=FALSE}
 library(lme4)
 library(performance)
 library(marginaleffects)
@@ -35,6 +35,7 @@ theme_set(theme_minimal())
 ```{r}
 faehnrich19 <- haven::read_sav("data/Faehnrich_2020.sav") |>
   haven::zap_labels()
+
 faehnrich19
 ```
 

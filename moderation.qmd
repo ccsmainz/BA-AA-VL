@@ -22,7 +22,7 @@ Wie wirkt der Dialekt von Politikern auf deren Bewertung?
 
 ## Pakete und Daten laden
 
-```{r setup}
+```{r, message=FALSE, warning=FALSE}
 library(marginaleffects)
 library(report)
 library(tidyverse)
@@ -30,22 +30,24 @@ theme_set(theme_minimal())
 ```
 
 ```{r}
-vb2017 <- haven::read_sav("data/Voegele_Bachl_2017.sav") |>
+vb17 <- haven::read_sav("data/Voegele_Bachl_2017.sav") |>
   mutate(geschlecht_w = ifelse(Geschlecht == 1, 1, 0)) |>
   haven::zap_labels()
+
+vb17
 ```
 
 ## Deskriptivstatistik
 
 ```{r}
-vb2017 |>
+vb17 |>
   select(gesamt) |>
   report::report_table()
 ```
 
 
 ```{r}
-vb2017 |>
+vb17 |>
   ggplot(aes(x = gesamt)) +
   geom_histogram()
 ```
@@ -57,14 +59,14 @@ vb2017 |>
 ### Unkonditionales Modell
 
 ```{r}
-lm(gesamt ~ schwab + geschlecht_w, data = vb2017) |>
+lm(gesamt ~ schwab + geschlecht_w, data = vb17) |>
   report::report_table()
 ```
 
 ### Geschlecht als Moderator
 
 ```{r}
-m1_geschlecht <- lm(gesamt ~ schwab + geschlecht_w + schwab:geschlecht_w, data = vb2017)
+m1_geschlecht <- lm(gesamt ~ schwab + geschlecht_w + schwab:geschlecht_w, data = vb17)
 report::report_table(m1_geschlecht)
 ```
 
@@ -116,7 +118,7 @@ preds_schwab_geschlecht |>
 In der Formel \* statt + für automatische Interaktionseffekte
 
 ```{r}
-m2 <- lm(gesamt ~ schwab * atol, data = vb2017)
+m2 <- lm(gesamt ~ schwab * atol, data = vb17)
 report::report_table(m2)
 ```
 
@@ -130,12 +132,12 @@ marginaleffects::avg_slopes(m2) |>
 ### Konditionale Effekte durch Zentrieren
 
 ```{r}
-lm(gesamt ~ schwab * I(atol - 1), data = vb2017) |> # atol = 1
+lm(gesamt ~ schwab * I(atol - 1), data = vb17) |> # atol = 1
   report_table()
 ```
 
 ```{r}
-lm(gesamt ~ schwab * I(atol - 5), data = vb2017) |> # atol = 5
+lm(gesamt ~ schwab * I(atol - 5), data = vb17) |> # atol = 5
   report_table()
 ```
 

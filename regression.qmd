@@ -61,7 +61,7 @@ johannes22 |>
 Bei einer bivariaten Analyse lohnt es sich immer, zunächste ein Punktdiagramm der beiden Variablen zu erstellen. Zusätzlich wird mit `geom_smooth()` die Regressionsgerade eingezeichnet. 
 
 ```{r}
-johannes22 %>%
+johannes22 |>
   ggplot(aes(x = age, y = music_time)) +
   geom_point() +
   geom_smooth(method = "lm")

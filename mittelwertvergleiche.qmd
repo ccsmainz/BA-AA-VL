@@ -24,7 +24,7 @@ Hängt die Rezeptionswahrscheinlichkeit von Nachrichten auf Facebook von der Art
 
 Zunächst laden wir die üblichen R-Pakete sowie die Daten von Kümpel (2019). Neu ist das Paket `marginaleffects`, mit dem wir aus Regressionsmodellen weitere Schätzungen, Vorhersagen oder Kontraste erhalten können. 
 
-```{r, include=F}
+```{r, message=FALSE, warning=FALSE}
 library(marginaleffects)
 library(report)
 library(tidyverse)

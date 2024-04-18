@@ -25,7 +25,7 @@ Hängt die Präferenz für Coca Cola oder Pepsi damit zusammen, ob Personen eine
 
 Zunächst laden wir die Pakete `report` (für schönere Modell-Outputs) und `tidyverse`, die wir praktisch immer brauchen. Anschließend laden wir die Daten, die in Form einer SPSS-Datei vorliegen.
 
-```{r}
+```{r, message=FALSE, warning=FALSE}
 library(report)
 library(tidyverse)
 theme_set(theme_minimal())
@@ -43,15 +43,15 @@ Der Datensatz enthält nur zwei relevante Spalten: die Experimentalbedingung `pe
 Zunächst berechnen wir die bivariaten Häufigkeiten bzw. die Gruppenmittelwerte, die bei 0/1-Variablen dem Anteil 1 entsprechen.
 
 ```{r}
-autylewis2004 %>%
-  group_by(pepsi_placement) %>%
+autylewis2004 |>
+  group_by(pepsi_placement) |>
   count(pepsi_chosen)
 ```
 
 
 ```{r}
-autylewis2004 %>%
-  group_by(pepsi_placement) %>%
+autylewis2004 |>
+  group_by(pepsi_placement) |>
   summarise(n = n(), m = mean(pepsi_chosen))
 ```
 

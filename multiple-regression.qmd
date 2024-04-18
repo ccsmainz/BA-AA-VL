@@ -24,7 +24,7 @@ Welche Variablen sagen politisches Wissen voraus?
 
 Zunächst laden wir die üblichen R-Pakete sowie die Daten von van Erkel & van Aelst (2021).
 
-```{r}
+```{r, message=FALSE, warning=FALSE}
 library(report)
 library(tidyverse)
 theme_set(theme_minimal())
@@ -33,7 +33,7 @@ theme_set(theme_minimal())
 Wir wandeln die Variablen `Eduction` und `Gender` in kategorielle Variablen (factor) um, damit R deren Ausprägungen nicht als Zahlenwerte interpretiert.
 
 ```{r}
-vanerkel21 <- haven::read_sav("data/Vanerkel_Vanaelst_2021.sav") %>%
+vanerkel21 <- haven::read_sav("data/Vanerkel_Vanaelst_2021.sav") |>
   mutate(
     Education = as_factor(Education),
     Gender = as_factor(Gender)
