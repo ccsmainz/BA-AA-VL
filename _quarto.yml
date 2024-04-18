@@ -4,48 +4,85 @@ project:
   preview:
     port: 4200
   pre-render: render.R
-  resources: ["ba-aa-vl.zip", "code"]
+  resources: ["ba-aa-vl.zip", "f"]
 
 book:
   title: "Anwendungsorientierte Analyseverfahren"
   language: "de"
+  page-footer: "Institut für Publizistik, Johannes Gutenberg-Universität Mainz | [Impressum](https://startseite.uni-mainz.de/impressum/) | [Datenschutz](https://www.uni-mainz.de/datenschutz/)"
   sidebar:
     style: floating
     search: false
-    title: "**IfP** | Stats </br>Vorlesung Analyseverfahren"
+    title: "**IfP** | Stats </br>Vorlesung **Analyseverfahren**"
     description: "BA"
+
 
   chapters:
     - index.qmd
-    - intro.qmd
-    - inferenzstatistik.qmd
-    - glm-I.qmd
-    - mittelwertvergleiche.qmd
-#    - literatur.qmd
+    - part: Grundlagen
+      chapters:
+    #  - intro.qmd
+    #- inferenzstatistik.qmd
+      - glm.qmd
+      - regression.qmd
+      - mittelwertvergleiche.qmd
+      - multiple-regression.qmd
+    - part: Vertiefung
+      chapters:
+      - modellannahmen.qmd
+      - modellvorhersagen.qmd
+      - moderation.qmd
+    - part: Erweiterungen
+      chapters:
+      - logistische-regression.qmd
+      - multilevel-regression.qmd
+    #- datenanalyse.qmd
+    - literatur.qmd
 
 bibliography: references.bib
-csl: apa-syl.csl
+csl: apa-cv.csl
+suppress-bibliography: true
 link-citations: false
+citations-hover: false
 
 knitr:
   opts_chunk:
     class-output: "txt"
-    out-width: 100%
-
-execute:
-  warning: false
-  message: false
-  freeze: false
-
+    warning: false
+    message: false
+    out.width: "100%"
+    fig.width: 8
+    fig.asp: .618
+    R.options:
+      tibble.print_max: 5
+      tibble.print_min: 5
 
 format:
   html:
     theme: [cosmo, styles.scss]
     highlight-style: monokai
-    code-overflow: wrap
-    fig-width: 8
-    fig-asp: .618
+    code-overflow: scroll
     fig-align: center
     title-block-style: none
-    toc-title-document: "Inhalt"
-    number-depth: 2
+    toc-title: "Inhalt"
+    callout-appearance: minimal
+    callout-icon: false
+
+#  pdf:
+#    mainfont: "Minion Pro"
+#    sansfont: "Minion Pro"
+#    monofont: "Inconsolata"
+#    monofontoptions:
+#      - Scale=0.8
+#    fontsize: 12pt
+#    papersize: a4
+#    lang: de
+#    classoption: "ngerman, DIV14, onesided"
+#    highlight-style: atom-one
+#    pdf-engine: xelatex
+
+editor_options:
+  chunk_output_type: console
+
+execute:
+  freeze: auto
