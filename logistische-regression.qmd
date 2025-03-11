@@ -22,12 +22,16 @@ Was sagt vorher, wer Opfer von Cybermobbing wird?
 
 ## Pakete und Daten laden
 
+Wir laden die üblichen Pakete sowie das `marginaleffects`-Paket, das es uns ermöglicht, Modellvorhersagen für die Interpretation der Koeffizienten zu nutzen. 
+
 ```{r, message=FALSE, warning=FALSE}
 library(marginaleffects)
 library(report)
 library(tidyverse)
 theme_set(theme_minimal())
 ```
+
+Anschließend laden wir die Daten, die in Form einer SPSS-Datei vorliegen. Der Datensatz enthält sechs Variablen. Für die nachfolgende Analyse nutzen wir die Outcome-Variable `cbvictim_gen`, das Geschlecht `gender` und die Internutzung `internetuse`. Die Outcome-Variable ist dichotom (0/1), während es sich bei den Prädiktoren um eine nominalskalierte (Geschlecht) und eine metrische (Internetnutzung pro Tag) Variable handelt.
 
 ```{r}
 festl13 <- haven::read_sav("data/Festl13.sav") |>
@@ -39,6 +43,8 @@ festl13
 
 ## Deskriptivstatistik
 
+Zunächst berechnen wir univariate Statistiken für unsere Outcome-Variable. Der Mittelwert entspricht bei dichotomen Variablen dem Anteil der Fälle mit der Ausprägung 1.
+
 ```{r}
 festl13 |>
   select(cbvictim_gen) |>
@@ -47,33 +53,48 @@ festl13 |>
 
 ## Nullmodell
 
+Für die logistische Regression bietet es sich an, zunächst mit einem Nullmodell (auch intercept-only model) zu starten. In R kann dies mit einer `1` anstatt einer Variablenbezeichnungen in der Formel umgesetzt werden. Zudem müssen wir im Funktionsargument `family` angeben, dass es sich um eine logistische Regression handelt, in dem wir dort den Wert `binomial` eintragen.
+
+
 ```{r}
 m0 <- glm(cbvictim_gen ~ 1, data = festl13, family = binomial)
 report::report_table(m0)
 ```
-
+Der Intercept lässt sich durch die sog. Inverse Logit Funktion (in R `plogis()`) in eine Baseline-Wahrscheinlichkeit umrechnen. Dieser Wert sollte im Nullmodel mit dem Anteil der Fälle mit der Ausprägung 1 übereinstimmen (siehe oben), weshalb wir den Wert zum Vergleich ebenfalls mit `round()` runden.
 
 ```{r}
 plogis(-2.14)
+round(plogis(-2.14), 2)
 ```
 
 
 ## Bivariate logistische Regression
 ### Prädiktor Geschlecht
 
+Wir beginnen unsere Analyse mit einer einfachen bivariaten logistischen Regression. Die von R berechneten Koffezienten sind sogenannte Logits (auch Log-Odds). Eine direkte Interpretation dieser Koeffizienten ist schwer, weshalb meist nur Signifikanz und Vorzeichen betrachtet werden.
+
 ```{r}
 m1_gender <- glm(cbvictim_gen ~ gender, festl13, family = binomial(link = "logit"))
 report::report_table(m1_gender)
 ```
 
+**Ergebnis**: Es besteht ein positiver, aber nicht statistisch signifikanter Zusammenhang zwischen Geschlecht und dem Risiko, Opfer von Cybermobbing zu werden.
+
 ### Average Marginal Effects
+
+Die Interpretation der Vorzeichen und Signifikanz ist eher unbefriedigend, da uns dieses Vorgehen nicht wirklich hilft, die Größe des Effekts greifbar zu machen. Eine bessere Herangehensweise ist die Berechnung von Average Marginal Effects (AME). Die Kernidee ist, für jeden Wert des Prädiktors in der Stichprobe den Anstieg in der Logit-Funktion der Outcome-Variable zu berechnen, und davon über die gesamte Stichprobe den Mittelwert zu errechnen. Dieser lässt sich als durchschnittliche Veränderung in der Wahrscheinlichkeit $P(Y=1)$ über alle Fälle in der Stichprobe interpretieren. Dazu können wir die Funktionen aus dem `marginaleffects`-Paket nutzen. Mit der Funktion `avg_comparisons` vergleichen wir die durchschnittliche Veränderung in der Wahrscheinlichkeit von Jungen und Mädchen Opfer von Cybermobbing zu werden. 
 
 ```{r}
 marginaleffects::avg_comparisons(m1_gender) |>
   as_tibble()
 ```
+Da Wahrscheinlichkeiten als Prozentangabe interpretiert werden können, ist die Ergebnisinterpretation denkbar einfach.
+
+**Ergebnis**: Mädchen besitzen eine 6 Prozentpunkte höhere durchschnittliche Wahrscheinlichkeit, Opfer von Cybermobbing zu werden. Der Unterschied ist natürlich auch hier nicht statistisch signifikant, weshalb wir ihn nicht weiter interpretieren.
 
 ### Vorhergesagte Wahrscheinlichkeiten
+
+Wir können das Modell auch nutzen, um uns die AME für beide Geschlecht mit der Funktion `avg_predictions()` auszugeben. Ziehen wir die beiden vorhergesagten Wahrscheinlichkeiten in der Spalte `estimate` voneinander ab, erhalten wir den gleichen Wert wie zuvor mit `avg_comparisons()`.
 
 ```{r}
 preds_gender <- marginaleffects::avg_predictions(m1_gender, variables = "gender") |>
@@ -82,6 +103,8 @@ preds_gender
 ```
 
 ### Visualisierte Vorhersagen
+
+Mit `ggplot()` können wir uns die vorhergesagten Wahrscheinlichkeiten des Modells grafisch darstellen.
 
 ```{r}
 preds_gender |>
@@ -93,19 +116,29 @@ preds_gender |>
 ## Multiple logistische Regression
 ### Prädiktoren Geschlecht und Internetnutzung
 
+Wie bei der linearen Regression können wir auch für die logistische Regression mehrere Prädiktoren verwenden. Das nachfolgende Modell enthält neben dem Geschlecht auch noch die tägliche Internetnutzung in Stunden. Die Interpretation ist analog zum bivariaten Fall.
+
 ```{r}
 m2_gender_internet <- glm(cbvictim_gen ~ gender + internetuse, data = festl13, family = binomial)
 report_table(m2_gender_internet)
 ```
 
+Der Koeffizient für die Internetnutzung ist positiv und signifikant. Allerdings ist die erklärte Varianz (Pseudo $R^2$) nach wie vor eher gering ($R^2$ = .03). Die anderen Koeffizienten ändern sich durch die zusätzliche unabhängige Variable Internetnutzung kaum.
+
 ### Average Marginal Effects
+
+Wie für den bivariaten Fall lassen sich auch für die multiple logistische Regression Average Marginal Effects berechnen und visualisieren.
 
 ```{r}
 marginaleffects::avg_comparisons(m2_gender_internet) |>
   as_tibble()
 ```
 
+Das Ergebnis von `avg_comparisons` zeigt uns, dass eine zusätzliche Stunde im Internet die durchschnittliche vorhergesagte Wahrscheinlichkeit, Opfer von Cybermobbing zu werden, um 2 Prozentpunkte erhöht.
+
 ### Vorhergesagte Wahrscheinlichkeiten
+
+Mit der Funktion `avg_predictions` können wir auch vorhergesagte Wahrscheinlichkeiten für unsere metrische Variable Internetnutzung berechnen.
 
 ```{r}
 preds_internet <- marginaleffects::avg_predictions(m2_gender_internet, variables = c("internetuse")) |>
@@ -113,7 +146,11 @@ preds_internet <- marginaleffects::avg_predictions(m2_gender_internet, variables
 preds_internet
 ```
 
+Wir erhalten die vorhergesagten Wahrscheinlichkeiten für null, eine, zwei, drei & dreizehn (!) Stunden Internetnutzung am Tag.
+
 ### Visualisierte Vorhersagen
+
+Die vorhergesagten Wahrscheinlichkeiten für diese vier Werte lassen sich auch wieder mit `ggplot()` darstellen.
 
 ```{r}
 preds_internet |>
@@ -127,3 +164,5 @@ preds_internet |>
     y = "Predicted probability of Cybervictimization",
   )
 ```
+
+Auffallend ist, dass ein starker Anstieg der vorhergesagten Wahrscheinlichkeit erst für eine sehr exzessive Internetnutzung prognostiziert wird.

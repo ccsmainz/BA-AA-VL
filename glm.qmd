@@ -1,6 +1,6 @@
 # GLM Grundlagen
 
-::: {.callout-tip collapse="true" appearance="minimal" .hidden}
+::: {.callout-tip collapse="true" appearance="minimal"}
 ## Folien
 
 ```{r, purl=F, echo=F}
@@ -10,6 +10,9 @@ xaringanExtra::embed_xaringan(
   border = F
 )
 ```
+
+[PDF-Datei](f/02-GLM.pdf)
+
 :::
 
 ### Beispielanalyse {.unnumbered}

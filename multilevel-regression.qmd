@@ -23,6 +23,8 @@ Welche Facebook-Posts von Universitäten werden am meisten kommentiert?
 
 ## Pakete und Daten laden
 
+Wir beginnen mit unserem üblichen Setup. Hinzu kommen die Pakte `lme4` und `performance`. `lme4` benötigen wird für die Multilevel-Regression, während `performance` eine Funktion für die Berechnung des Intraclass Correlation Coefficient (ICC) enthält. Anschließend laden wir die Daten, die wieder in Form einer SPSS-Datei vorliegen.
+
 ```{r, message=FALSE, warning=FALSE}
 library(lme4)
 library(performance)
@@ -39,17 +41,24 @@ faehnrich19 <- haven::read_sav("data/Faehnrich_2020.sav") |>
 faehnrich19
 ```
 
+Multilevel-Modelle werden für die Analyse von hierarchisch geschachtelten Daten verwendet. Diese Datenstruktur liegt hier ebenfalls vor, da Facebook-Posts und deren Kommentare innerhalb von Facebook-Seiten gruppiert sind. Die Posts bilden damit eine Ebene unterhalb der Seiten, die von den Universitäten betrieben werden. Entsprechend liegen in unserem Datensatz 2 Ebenen vor: die Facebook-Seite der Universität (Level 2) und die Posts (Level 1).
+
 ## Deskriptivstatistik
+
+Wir betrachten zunächst die Level-2-Variable, in dem wir uns die Anzahl der Posts pro Universität in unserer Stichprobe ausgeben lassen.
 
 ```{r}
 count(faehnrich19, uni)
 ```
+Wie bei allen Analysen lohnt sich auch bei Mutlilevel-Modellen ein Blick auf die Verteilung der Outcome-Variable, in diesem Fall die Anzahl Kommentare pro Post. 
 
 ```{r}
 faehnrich19 |>
   select(comments_count) |>
   report::report_table()
 ```
+
+Ein Blick in das Histogram verrät, dass die Variable eine starke rechtsschiefe Verteilung aufweist. Zugleich wird ersichtlich, dass die meisten Posts nur wenige Kommentare erhalten. Andererseits scheinen einige Posts sehr erfolgreich zu sein.
 
 ```{r}
 faehnrich19 |>
@@ -60,23 +69,34 @@ faehnrich19 |>
 
 ## Nullmodell und ICC
 
+Wie für andere Analyseverfahren können wir auch für Multilevel-Modelle ein Nullmodel berechnen. Dazu ist lediglich eine kleine Änderung in der Formel nötig. Zusätzlich zu der `1` für den Intercept brauchen wir einen Term für die Varying Intercepts, welche die gruppenspezifischen Abweichungen vom Gesamtmittelwert darstellen. Da wir für jede Gruppe, d.h. für jede Universität, einen eigenen Intercept berechnen wollen, müssen wir noch `(1 | uni)` hinzufügen.
+
 ```{r}
 m0 <- lmer(comments_count ~ 1 + (1 | uni), data = faehnrich19)
 report_table(m0)
 ```
 
+Das Nullmodel gibt Auskunft darüber, wie sich die Varianz auf die verschiedenen Ebenen verteilt. Diese Varianzen können wir nutzen, um den Intraklassenkorrelationskoeffizient (ICC) zu berechnen, der einen Hinweis darauf gibt, ob ein Multilevel-Modell überhaupt nötig ist.
+
 ### ICC
+
+Die Informationen für die Berechnung des ICC lassen sich aus der Spalte `coefficient` entnehmen. Darin enthalten sind die Werte für die Varianz auf beiden Ebenen in Form der Standardabweichungen (= Quadratwurzel der Varianz). Die benötigten Werte werden hier als `uni` (Level-2) und `Residual` (Level-1) bezeichnet.
 
 ```{r}
 16.71^2 / (16.71^2 + 33.32^2)
 ```
 
+Etwa 20% der Varianz werden durch die Gruppen erklärt, weshalb es in unserem Fall sinnvoll ist, auf ein Multilevel-Modell zurückzugreifen. Das Paket `perfmormance` besitzt auch eine dedizierte Funktion `icc()`, welche ebenfalls den Intraklassenkorrelationskoeffizient berechnet.
 
 ```{r}
 performance::icc(m0)
 ```
 
+Interpretation: Etwa 20% der Varianz in der Kommentaranzahl lässt sich ausschließlich durch Unterschiede zwischen den Universitäts-Seiten auf Facebook erklären.
+
 ### Vorausgesagte Mittelwerte (inkl. Varying Intercepts )
+
+Wir können uns auch die vorhergesagte Anzahl an Kommentaren für die Facebook-Accounts der verschiedenen Universitäten ausgeben lassen. Dazu berechnen wir wieder Average Marginal Effects mit der Funktion `avg_predictions`.
 
 ```{r}
 preds_uni <- marginaleffects::avg_predictions(m0, variables = "uni") |>
@@ -84,15 +104,23 @@ preds_uni <- marginaleffects::avg_predictions(m0, variables = "uni") |>
 preds_uni
 ```
 
+Wie wir sehen, gibt deutliche Unterschiede zwischen den einzelnen Universitäten. Während bei einigen Facebook-Seiten nur einige wenige Kommentare unter einem Post zu erwarten sind, gibt es einzelne Universitäten, die im Durchschnitt mit 60 oder mehr Kommentaren rechnen können.
+
 ## Modell mit Varying Intercepts 
 ### Lineares Modell mit Varying Intercepts 
+
+Nun fügen wir dem Nullmodell noch die dichotome Variable `topic_reseach` hinzu, welche auf Level 1 angesiedelt ist, also der Post-Ebene. Der Prädiktor gibt an, ob sich der Facebook-Post mit Forschungsthemen befasst oder nicht.
 
 ```{r}
 m1_research <- lmer(comments_count ~ 1 + topic_research + (1 | uni), data = faehnrich19)
 report::report_table(m1_research)
 ```
 
+Da es sich um ein lineares Modell handelt, kann der Koeffizient direkt interpretiert werden. Entsprechend können wir folgenden Befund festhalten: Posts, die Forschungsthemen behandeln, erhalten durchschnittlich 4 Kommentare weniger als andere Posts. Der Effekt ist statistisch signifikant (p\<.001).
+
 ### Modellvorhersagen
+
+Auch für dieses Modell können wir Average Marginal Effects berechnen.
 
 ```{r}
 preds_uni <- avg_predictions(m1_research, variables = c("topic_research", "uni")) |>
@@ -102,6 +130,8 @@ preds_uni
 
 ### Visualisierung der Vorhersagen
 
+Die AME lassen sich dann auch wieder grafisch darstellen.
+
 ```{r}
 preds_uni |>
   ggplot(aes(x = factor(topic_research), y = estimate, color = uni, group = uni)) +
@@ -110,28 +140,43 @@ preds_uni |>
   labs(x = "Topic Research", y = "Predicted comments")
 ```
 
+Der negative Effekt von Forschungsthemen in einem Facebook-Post ist im vorliegenden Modell bei allen Universitäten gleich. Die Universitäten unterscheiden sich hier nur durch die Varying Intercepts. Wir sehen auch, dass das Modell für einige Universitäten eine negative Anzahl an Kommentaren vorhersagt, das Modell also nicht sehr gut zu den Daten passt.
+
+
 ## Modell mit Varying Intercepts und Slopes
 
 ### Varying slopes für Thema Forschung
 
+Multilevel-Modelle können neben Varying Intercepts auch Varying Slopes enthalten. Kurz gesagt bilden Varying Slopes unterschiedliche Effekte einer Variable in den verschiedenen Gruppen ab. In der nachfolgenden Analyse nehmen wir an, dasss Facebook-Posts mit Bezug zur Forschung nicht bei allen Universitäten den gleichen (negativen) Effekt haben. Die Varying Slopes fügen wir hinzu, indem wir die Variable `topic_research` in die Klammer `(1 | uni)`, welche die Varying Intercepts kennzeichnet, aufnehmen.
+
 ```{r}
 m2_research_vs <- lmer(comments_count ~ 1 + topic_research + (1 + topic_research | uni), data = faehnrich19)
 report::report_table(m2_research_vs)
+summary(m2_research_vs)
 ```
+Erneut sehen wir, dass Forschungsthemen mit einer niedrigeren Anzahl Kommentaren zusammenhängen. Interessant ist, dass der negative Zusammenhang laut Modell stark von den Universitäten abhängt, wie wir aus der berechneten Standardabweichung von 6.24 für die Varying Slopes ablesen können (zur Erinnerung: ca. 2/3 aller Koeffizienten liegen +- 1 SD um den mittleren Effekt).
 
 ### Modellvergleich Fixed vs. Varying Slopes
+
+Um unsere beiden Modelle zu vergleichen, können wir die `anova()`-Funktion nutzen, um einen Likelihood-Ratio-Test durchzuführen.
 
 ```{r}
 anova(m1_research, m2_research_vs)
 ```
+Der Test zeigt an, dass das Varying Slopes und Intercept Modell signifikant besser ist als das Varying Intercept Modell (p\<.001), d.h. es gibt signifikante Effektheterogenität bezüglich des Prädiktors Forschungsthema.
 
 ### Varying slopes pro Uni
+
+AMEs lassen sich ebenfalls für die Varying Slopes berechnen. Dafür gibt es eine spezielle Funktion `avg_slopes()`.
 
 ```{r}
 marginaleffects::avg_slopes(m2_research_vs, by = "uni") |>
   as_tibble()
 ```
+
 ### Modellvorhersagen
+
+Wir können wieder `avg_predictions()` nutzen, um Vorhersagen für die Anzahl der Kommentare unter Posts mit und ohne Wissenschaftsbezug für die einzelnen Universitäten zu erhalten.
 
 ```{r}
 preds_uni_vs <- avg_predictions(m2_research_vs, variables = c("topic_research", "uni")) |>
@@ -141,6 +186,7 @@ preds_uni_vs
 
 ### Visualisierung der Vorhersagen
 
+
 ```{r}
 preds_uni_vs |>
   ggplot(aes(x = factor(topic_research), y = estimate, color = uni, group = uni)) +
@@ -149,10 +195,15 @@ preds_uni_vs |>
   labs(x = "Topic Research", y = "Predicted comments")
 ```
 
+Die Visualisierung zeigt deutlich, dass Posts mit Bezug zu Forschungsthemen bei einigen Universitäten nur geringfügig die vorhergesagte Anzahl an Kommentaren (= flachere Gerade) beeinflusst, während bei anderen deutlich stärkere negative Effekte auftreten.
 
 ## Modell mit Level-2-Prädiktor
+
+Bislang haben wir mit `topic_research` lediglich einen Level-1-Prädiktor für unsere Analyse verwendet. Es ist aber ebenso möglich, einen Level-2-Prädiktor in das Modell aufzunehmen, um die Unterschiede zwischen den Gruppen zu erklären. Die Anzahl der Kommentare sollte bei allen Posts davon abhängen, wieviele Fans die Facebook-Seite der Universität hat, allein schon weil mehr NutzerInnen diese Posts zu sehen bekommen. Deshalb fügen wir die Variable `uni_fans` in die Formel ein.
 
 ```{r}
 m3_research_fans <- lmer(comments_count ~ 1 + topic_research + uni_fans + (1 + topic_research | uni), data = faehnrich19)
 report::report_table(m3_research_fans)
 ```
+
+Wie wir sehen, hängt die Anzahl der Fans positiv mit der Anzahl an Kommentaren zusammen. Der Effekt ist statistisch signifikant (p\<.001). Allerdings zeigt sich auch, dass der Koeffizient `topic_research` nun einen noch stärkeren negativen Effekt zeigt Keine guten Aussichten für die Wissenschaftler, die sich mit ihrer Forschung auf sozialen Medien präsentieren wollen...

@@ -1,11 +1,11 @@
 # Mittelwertvergleiche
 
-::: {.callout-tip collapse="true" appearance="minimal" .hidden}
+::: {.callout-tip collapse="true" appearance="minimal"}
 ## Folien
 
 ```{r, purl=F, echo=F}
 xaringanExtra::embed_xaringan(
-  url = "f/02-GLM.html#/title-slide",
+  url = "f/04-Mittelwertvergleiche.html#/title-slide",
   ratio = "16:9",
   border = F
 )
