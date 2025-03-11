@@ -1,14 +1,15 @@
 # Multilevel-Regression
-::: {.callout-tip collapse="true" appearance="minimal" .hidden}
+::: {.callout-tip collapse="true" appearance="minimal"}
 ## Folien
 
 ```{r, purl=F, echo=F}
 xaringanExtra::embed_xaringan(
-  url = "f/02-GLM.html#/title-slide",
+  url = "f/10-Multilevel.html#/title-slide",
   ratio = "16:9",
   border = F
 )
 ```
+[PDF-Datei](f/10-Multilevel.pdf)
 :::
 
 ### Beispielanalyse {.unnumbered}
@@ -55,7 +56,7 @@ Wie bei allen Analysen lohnt sich auch bei Mutlilevel-Modellen ein Blick auf die
 ```{r}
 faehnrich19 |>
   select(comments_count) |>
-  report::report_table()
+  report::report_sample()
 ```
 
 Ein Blick in das Histogram verrät, dass die Variable eine starke rechtsschiefe Verteilung aufweist. Zugleich wird ersichtlich, dass die meisten Posts nur wenige Kommentare erhalten. Andererseits scheinen einige Posts sehr erfolgreich zu sein.

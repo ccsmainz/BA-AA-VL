@@ -10,6 +10,7 @@ xaringanExtra::embed_xaringan(
   border = F
 )
 ```
+[PDF-Datei](f/04-Mittelwertvergleiche.pdf)
 :::
 
 ### Beispielanalyse {.unnumbered}

@@ -1,14 +1,15 @@
 # Logistische Regression
-::: {.callout-tip collapse="true" appearance="minimal" .hidden}
+::: {.callout-tip collapse="true" appearance="minimal" }
 ## Folien
 
 ```{r, purl=F, echo=F}
 xaringanExtra::embed_xaringan(
-  url = "f/02-GLM.html#/title-slide",
+  url = "f/09-Logistische.html#/title-slide",
   ratio = "16:9",
   border = F
 )
 ```
+[PDF-Datei](f/09-Logistische.pdf)
 :::
 
 ### Beispielanalyse {.unnumbered}
@@ -82,7 +83,7 @@ report::report_table(m1_gender)
 
 ### Average Marginal Effects
 
-Die Interpretation der Vorzeichen und Signifikanz ist eher unbefriedigend, da uns dieses Vorgehen nicht wirklich hilft, die Größe des Effekts greifbar zu machen. Eine bessere Herangehensweise ist die Berechnung von Average Marginal Effects (AME). Die Kernidee ist, für jeden Wert des Prädiktors in der Stichprobe den Anstieg in der Logit-Funktion der Outcome-Variable zu berechnen, und davon über die gesamte Stichprobe den Mittelwert zu errechnen. Dieser lässt sich als durchschnittliche Veränderung in der Wahrscheinlichkeit $P(Y=1)$ über alle Fälle in der Stichprobe interpretieren. Dazu können wir die Funktionen aus dem `marginaleffects`-Paket nutzen. Mit der Funktion `avg_comparisons` vergleichen wir die durchschnittliche Veränderung in der Wahrscheinlichkeit von Jungen und Mädchen Opfer von Cybermobbing zu werden. 
+Die Interpretation der Vorzeichen und Signifikanz ist eher unbefriedigend, da uns dieses Vorgehen nicht wirklich hilft, die Größe des Effekts greifbar zu machen. Eine bessere Herangehensweise ist die Berechnung von Average Marginal Effects (AME). Die Kernidee ist, für jeden Wert der Prädiktorvariable in der Stichprobe den Anstieg in der Logit-Funktion der Outcome-Variable zu berechnen, und davon über die gesamte Stichprobe den Mittelwert zu errechnen. Dieser lässt sich als durchschnittliche Veränderung in der Wahrscheinlichkeit $P(Y=1)$ über alle Fälle in der Stichprobe interpretieren. Dazu können wir die Funktionen aus dem `marginaleffects`-Paket nutzen. Mit der Funktion `avg_comparisons` vergleichen wir die durchschnittliche Veränderung in der Wahrscheinlichkeit von Jungen und Mädchen Opfer von Cybermobbing zu werden. 
 
 ```{r}
 marginaleffects::avg_comparisons(m1_gender) |>

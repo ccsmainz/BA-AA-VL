@@ -1,14 +1,15 @@
 # Moderationsanalyse
-::: {.callout-tip collapse="true" appearance="minimal" .hidden}
+::: {.callout-tip collapse="true" appearance="minimal"}
 ## Folien
 
 ```{r, purl=F, echo=F}
 xaringanExtra::embed_xaringan(
-  url = "f/02-GLM.html#/title-slide",
+  url = "f/08-Moderation.html#/title-slide",
   ratio = "16:9",
   border = F
 )
 ```
+[PDF-Datei](f/08-Moderation.pdf)
 :::
 
 ### Beispielanalyse {.unnumbered}
@@ -22,12 +23,15 @@ Wie wirkt der Dialekt von Politikern auf deren Bewertung?
 
 ## Pakete und Daten laden
 
+Wir beginnen mit den üblichen R-Paketen, die wir für die Analyse verwenden wollen. Hinzu kommt das Paket `marginaleffects`, welches Modellvorhersagen für die Interpretation der Koeffizienten enthält.
+
 ```{r, message=FALSE, warning=FALSE}
 library(marginaleffects)
 library(report)
 library(tidyverse)
 theme_set(theme_minimal())
 ```
+Weiter laden wir den Datensatz von Vögele und Bachl (2017). Zudem erstellen wir eine neue Variable `geschlecht_w`, die den Wert `1` annimmt, wenn es sich um eine Frau handelt. 
 
 ```{r}
 vb17 <- haven::read_sav("data/Voegele_Bachl_2017.sav") |>
@@ -39,54 +43,71 @@ vb17
 
 ## Deskriptivstatistik
 
+Zunächst betrachten wir die Outcome-Variable `gesamt`, welche die Gesamtbewertung des Politikers beschreibt.
+
 ```{r}
 vb17 |>
   select(gesamt) |>
   report::report_table()
 ```
+Höhere Werte bedeuten, dass die Befragten einen besseren Eindruck des Politikers hatten. Die Daten zeigen, dass im Durchschnitt eher ein guter Eindruck überwogen hat (M = 3.70; SD = 0.88).
 
+Wir können mittels eines Histograms darstellen, welche Bewertung wie häufig vergeben wurde.
 
 ```{r}
 vb17 |>
   ggplot(aes(x = gesamt)) +
   geom_histogram()
 ```
-
-
+Es zeigt sich, dass die meisten Befragten eine eher positive Bewertung (4) vergeben haben.
 
 ## Interaktion mit kategorieller Moderatorvariable
 
 ### Unkonditionales Modell
 
+Das erste Regressionsmodell enthält keinen Interaktionseffekt, sondern lediglich das Geschlecht und eine Indikatorvariable, welche angibt, ob der Politiker einen schwäbischen Dialekt spricht (1) oder nicht (0). Es handelt sich also hierbei um eine simple multiple Regression, die wir bereits kennengelernt haben.
+
 ```{r}
 lm(gesamt ~ schwab + geschlecht_w, data = vb17) |>
   report::report_table()
 ```
+Beide Variablen sagen signifikant die Gesamtbewertung des Politikers voraus. Männliche und weibliche Befragte unterscheiden sich um einen drittel Skalenpunkt, sowie Dialektspecher um einen fünftel Skalenpunkt. Der Intercept lässt sich hier direkt interpretieren. Er stellt die durchschnittliche Bewertung des nicht schwäbisch sprechenden Politikers (schwab = 0) durch einen Mann (geschlecht_w = 0) dar. Die Varianzaufklärung des Modells ist mit 5% eher niedrig.
 
 ### Geschlecht als Moderator
+
+Nachfolgend nehmen wir an, dass das Geschlecht (= Moderator) einen moderierenden Einfluss auf die Beziehung zwischen Dialektsprechern und der Gesamtbewertung hat. Einen Moderationseffekt (auch Interaktionseffekt) können wir in R spezifizieren, in dem wir die beiden Variablen, die miteinander interagieren, mit einem Doppelpunkt (`:`) verbinden anstatt eines Pluszeichens (`+`). In unserem Fall sieht dieser Interaktionsterm dann so aus: `schwab:geschlecht_w`. Verwenden wir den Doppelpunkt müssen wir den Prädiktor (Dialektsprecher) als auch die Moderationsvariable (Geschlecht) mit in die Formel aufnehmen.
 
 ```{r}
 m1_geschlecht <- lm(gesamt ~ schwab + geschlecht_w + schwab:geschlecht_w, data = vb17)
 report::report_table(m1_geschlecht)
 ```
 
+Wie sich herausstellt, ist der Interaktionsterm nicht statistisch signifikant, d.h. der Treatment-Effekt variiert nicht signifikant nach Geschlecht der VersuchsteilnehmerInnen. Die konstitutiven Teile des Interaktionseffekts werden Haupteffekte genannt. Hier ist lediglich die Nutzung des schwäbischen Dialekts statistisch signifikant (p = .008). Diese Haupteffekte sind konditional, d.h. abhängig vom Interaktionseffekt, weshalb wir sie hier nicht direkt interpretieren.
+
 ### Haupteffekte (average marginal effects)
+
+Zur Interpretation der Haupteffekte nutzen wir die Funktion `avg_slopes()`. Diese Funktion berechnet den Average Marginal Effect (AME). Das bedeutet, dass die Funktion für jeden Fall (= Person) in der Stichprobe den Effekt der Prädiktoren auf die abhängige Variable berechnet. Anschließend wird der Durchschnitt gebildet. Auf diese Weise erhalten wir die Haupteffekte.
 
 ```{r}
 marginaleffects::avg_slopes(m1_geschlecht) |>
   as_tibble()
 ```
 
+Diese Koeffizienten entsprechen denen des unkonditionalen Models.
 
 ### Konditionale Effekte für Dialekt in Abhängigkeit von Geschlecht
+
+Mit dem Funktionsargument `by` können wir die konditionalen Effekte für Dialekt in Abhängigkeit von Geschlecht berechnen. 
 
 ```{r}
 marginaleffects::avg_slopes(m1_geschlecht, variable = "schwab", by = "geschlecht_w") |>
   as_tibble()
 ```
-
+Das Ergebnis zeigt uns, dass Männer stark negativ auf dialekt sprechende Politiker reagieren (B = -0.35), während sich bei Frauen nur ein geringer Effekt zeigt (B = -0.086).
 
 ### Modellvorhersagen (Dialekt und Geschlecht)
+
+Wir können auch die durchschnittlichen vorhergesagten Bewertungen des Politikers für verschiedene Werte der Variablen Dialekt und Geschlecht berechnen. Dazu nutzen wir `avg_predictions()`. 
 
 ```{r}
 preds_schwab_geschlecht <- marginaleffects::avg_predictions(m1_geschlecht, variables = c("schwab", "geschlecht_w")) |>
@@ -94,7 +115,11 @@ preds_schwab_geschlecht <- marginaleffects::avg_predictions(m1_geschlecht, varia
 preds_schwab_geschlecht
 ```
 
+Die vohergesagten Werte bestätigen die Ergebnisse unserer Analyse der Koeffizienten mit `avg_slopes`. Männer bewerten schwäbisch sprechende Politiker mehr als eine drittel Skalenpunkt schlechter, während sich bei Frauen die vorhergesaten Werte kaum unterscheiden.
+
 ### Visualisierung der Vorhersagen
+
+Anschaulicher wird es, wenn wir diese Vorhersagen auch grafisch darstellen.
 
 ```{r}
 preds_schwab_geschlecht |>
@@ -115,49 +140,63 @@ preds_schwab_geschlecht |>
 
 ## Interaktion mit metrischer Moderatorvariable
 
-In der Formel \* statt + für automatische Interaktionseffekte
+Statt der Notation mit Doppelpunkten (`:`) können wir auch das Sternchen (`*`) für den Interaktionsterm nutzen, womit wir uns etwa Schreibarbeit sparen. Verwenden wir das Sternchen werden die konstitutiven Teile des Interaktionsterms automatisch in die Formel hinzugefügt, weshalb wir diese nicht selbst ausschreiben müssen. Nachfolgend wollen wir überprüfen, ob der Effekt des Dialektgebrauchs auf die Politikerbewertung von der Voreinstellung der Befragten gegenüber der schwäbischen Mundart (`atol`) abhängig ist. Höhere Werte der Variable `atol` bedeuten eine positivere Voreinstellung.
 
 ```{r}
 m2_atol <- lm(gesamt ~ schwab * atol, data = vb17)
 report::report_table(m2_atol)
 ```
+Wie sich herausstellt, ist der Interaktionsterm  statistisch signifikant, d.h. der Treatment-Effekt variiert signifikant nach der Voreinstellung der VersuchsteilnehmerInnen zur schwäbischen Mundart. Zudem ist die Nutzung des schwäbischen Dialekts statistisch signifikant (p < .001).
 
 ### Haupteffekte (average marginal effects)
+
+Wir wiederholen an dieser Stelle das Vorgehen aus dem vorherigen Kapitel und berechnen die Haupteffekte mittels `avg_slopes()`.
 
 ```{r}
 marginaleffects::avg_slopes(m2_atol) |>
   as_tibble()
 ```
+Die Berechnungen zeigen einen positiven Effekt der Voreinstellung und einen negativen des Dialekts, wobei nur der Haupteffekt der Mundart statistisch signifikant ist (p = .027).
 
 ### Konditionale Effekte durch Zentrieren
+
+Konditionale Effekte lassen sich ebenso für bestimmte Werte von metrischen Variablen berechnen. Nachfolgend schauen wir uns diese Effekte für die beiden Extremwerte der Voreinstellungsskale an. Dieser Schritt nennt sich Zentrierung. Dafür ist lediglich eine kleine Änderung am Code notwendig. Wir fügen lediglich ein `I()` samt dem gesuchten Wert (hier 1 oder 5) ein. `I()` verhindert, dass R die Zahl als Objekt interpretiert und eine Fehlermeldung ausgibt.
 
 ```{r}
 lm(gesamt ~ schwab * I(atol - 1), data = vb17) |> # atol = 1
   report_table()
 ```
+Die Tabelle zeigt, dass sich der Interaktionsterm nicht ändert, der Haupteffekt für die Voreinstellung hingegen schon. Dieser Haupteffekt gilt nun für den Fall, dass der Befragte sehr negativ zur schwäbischen Mundart eingestellt ist. Erwartungsgemäß ist der Haupteffekt stark negativ (B = 1.13).
+
+Das gleiche Spiel können wir mit dem anderen Extrempunkt der Skala machen.
 
 ```{r}
 lm(gesamt ~ schwab * I(atol - 5), data = vb17) |> # atol = 5
   report_table()
 ```
+In dieser Konstellation finden wir einen positiven Effekt für Personen, die eine Sympathie für den schwäbischen Dialekt haben. 
+
 
 ### Conditional effects plot
+
+Unsere gerade aufgestellten Berechnungen können wir auch für alle Werte der Voreinstellung zum Dialekt durchführen und grafisch darstellen. Dafür gibt es die Funktion `plot_slopes()`.
 
 ```{r}
 marginaleffects::plot_slopes(m2_atol, variables = "schwab", condition = "atol") +
   labs(x = "ATOL Score", y = "Effekt von Dialekt auf Bewertung") +
   geom_hline(yintercept = 0, linetype = "dashed")
 ```
-
+Die Grafik zeigt substantiell negative Effekte für Personen, die das Schwäbische eher ablehnen. Lediglich bei Liebhabern des Dialekts lassen sich leicht positive Effekte feststellen.
 
 ### Modellvorhersagen (Dialekt und 3 Level von ATOL)
+
+Die Modellvorhersagen lassen sich auch für bestimmte Ausprägungen der Prädiktoren berechnen.
 
 ```{r}
 preds_schwab_atol <- marginaleffects::avg_predictions(m2_atol, variables = list("schwab" = 0:1, "atol" = c(1, 3, 5))) |>
   as_tibble()
 preds_schwab_atol
 ```
-
 
 ### Visualisierung der Vorhersagen
 
@@ -174,4 +213,4 @@ preds_schwab_atol |>
   labs(y = "Gesamtbewertung (vorhergesagt)", x = "Dialekt", color = "ATOL Score")
 ```
 
-
+Die Visualisierung bestätigt unsere bereits angestellten Analysen. Je positiver die Voreinstellung gegenüber dem Schwäbischen, desto besser ist die vorhergesagte Bewertung des schwäbisch sprechenden Politikers. Zugleich zeigt sich, dass hochdeutsch sprechende Politiker besser bewertet werden.
