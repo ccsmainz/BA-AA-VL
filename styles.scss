@@ -2,14 +2,18 @@
 
 /*-- scss:defaults --*/
 $pink: #f92672 !default;
-$cyan:    #66d9ef !default;
-$purple:  #ae81ff !default;
-$orange:  #fd971f !default;
-$green:   #a6e22e !default;
+$cyan: #66d9ef !default;
+$purple: #ae81ff !default;
+$orange: #fd971f !default;
+$green: #a6e22e !default;
+
+
+$red: #f92672 !default;
+$blue: #ae81ff !default;
 
 // colors
-$primary:       $green !default;
-$secondary:     $orange !default;
+$primary: $green !default;
+$secondary: $cyan !default;
 
 //$link-color: $pink;
 //$sidebar-hl: $pink;
@@ -19,10 +23,10 @@ $font-family-monospace: "Fira Mono" !default;
 //$headings-font-family: "Jost" !default;
 
 
-$h1-font-size:          2rem !default;
-$h2-font-size:          1.5rem !default;
-$h3-font-size:          1.2rem !default;
-$headings-font-weight:  800 !default;
+$h1-font-size: 2rem !default;
+$h2-font-size: 1.5rem !default;
+$h3-font-size: 1.2rem !default;
+$headings-font-weight: 800 !default;
 
 
 //Layout
@@ -30,17 +34,20 @@ $content-padding-top: 1em;
 
 /*-- scss:rules --*/
 
-
-
-.header-section-number{color: $primary;}
-.sidebar-header strong{color: $primary;}
-
-// Shrink blocks of code
-pre.text, pre.sourceCode, .cell-output pre {
-    font-size: .75em;
+.header-section-number {
+  color: $primary;
 }
 
-code span.ot {color: white;}
+.sidebar-header strong {
+  color: $primary;
+}
+
+// Shrink blocks of code
+pre.text,
+pre.sourceCode,
+.cell-output pre {
+  font-size: .75em;
+}
 
 /*
 h1, h2, h3, h4 {
@@ -50,4 +57,3 @@ h1, h2, h3, h4 {
   padding:.25em;
 }
 */
-
