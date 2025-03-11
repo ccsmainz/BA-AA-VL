@@ -1,0 +1,18 @@
+Version: 1.0
+ProjectId: dade3550-7b12-49df-99be-85a34a51ab99
+
+RestoreWorkspace: No
+SaveWorkspace: No
+AlwaysSaveHistory: Default
+
+EnableCodeIndexing: Yes
+UseSpacesForTab: Yes
+NumSpacesForTab: 2
+Encoding: UTF-8
+
+RnwWeave: knitr
+LaTeX: pdfLaTeX
+
+StripTrailingWhitespace: Yes
+
+UseNativePipeOperator: Yes
