@@ -1,16 +1,4 @@
 # Modellvorhersagen
-::: {.callout-tip collapse="true" appearance="minimal"}
-## Folien
-
-```{r, purl=F, echo=F}
-xaringanExtra::embed_xaringan(
-  url = "f/07-Modellvorhersagen.html#/title-slide",
-  ratio = "16:9",
-  border = F
-)
-```
-[PDF-Datei](f/07-Modellvorhersagen.pdf)
-:::
 
 ### Beispielanalyse {.unnumbered}
 

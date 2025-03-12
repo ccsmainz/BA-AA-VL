@@ -1,18 +1,5 @@
 # Mittelwertvergleiche
 
-::: {.callout-tip collapse="true" appearance="minimal"}
-## Folien
-
-```{r, purl=F, echo=F}
-xaringanExtra::embed_xaringan(
-  url = "f/04-Mittelwertvergleiche.html#/title-slide",
-  ratio = "16:9",
-  border = F
-)
-```
-[PDF-Datei](f/04-Mittelwertvergleiche.pdf)
-:::
-
 ### Beispielanalyse {.unnumbered}
 Hängt die Rezeptionswahrscheinlichkeit von Nachrichten auf Facebook von der Art der Kuratierung ab?
 

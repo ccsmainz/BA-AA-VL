@@ -1,20 +1,5 @@
 # GLM Grundlagen
 
-::: {.callout-tip collapse="true" appearance="minimal"}
-## Folien
-
-```{r, purl=F, echo=F}
-xaringanExtra::embed_xaringan(
-  url = "f/02-GLM.html#/title-slide",
-  ratio = "16:9",
-  border = F
-)
-```
-
-[PDF-Datei](f/02-GLM.pdf)
-
-:::
-
 ### Beispielanalyse {.unnumbered}
 
 Hängt die Präferenz für Coca Cola oder Pepsi damit zusammen, ob Personen einen Film mit Produktplatzierung von Pepsi gesehen haben? 

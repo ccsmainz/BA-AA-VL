@@ -4,23 +4,6 @@ Dies ist die Website der Vorlesung **Anwendungsorientierte Analyseverfahren** am
 
 In dieser Vorlesung werden vor allem das GLM und Regressionsmodelle behandelt.
 
-## Folien zur Einführung
-
-::: {.callout-tip collapse="true"}
-## Folien SoSe 2024
-
-```{r, purl=F, echo=F}
-xaringanExtra::embed_xaringan(
-  url = "f/01-Einfuehrung.html#/title-slide",
-  ratio = "16:9",
-  border = F
-)
-```
-
-[PDF-Datei](f/01-Einfuehrung.pdf)
-
-:::
-
 
 ## Kursmaterialien
 Alle Materialien in Form von R-Code und Datensätzen sind [hier als ZIP-Datei](ba-aa-vl.zip) verfügbar. Wenn Sie den Ordner entpackt und die Projekt-Datei `BA-AA-VL.Rproj` geöffnet haben, können Sie alle Analysen auf den nachfolgenden Seiten sowie eigene Hausaufgaben und Übungen darin durchführen.

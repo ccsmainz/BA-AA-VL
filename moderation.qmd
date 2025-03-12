@@ -1,16 +1,4 @@
 # Moderationsanalyse
-::: {.callout-tip collapse="true" appearance="minimal"}
-## Folien
-
-```{r, purl=F, echo=F}
-xaringanExtra::embed_xaringan(
-  url = "f/08-Moderation.html#/title-slide",
-  ratio = "16:9",
-  border = F
-)
-```
-[PDF-Datei](f/08-Moderation.pdf)
-:::
 
 ### Beispielanalyse {.unnumbered}
 

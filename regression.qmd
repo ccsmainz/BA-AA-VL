@@ -1,19 +1,5 @@
 # Lineare Regression
 
-::: {.callout-tip collapse="true" appearance="minimal"}
-## Folien
-
-```{r, purl=F, echo=F}
-xaringanExtra::embed_xaringan(
-  url = "f/03-Regression.html#/title-slide",
-  ratio = "16:9",
-  border = F
-)
-```
-[PDF-Datei](f/03-Regression.pdf)
-
-:::
-
 ### Beispielanalyse {.unnumbered}
 Wie hängen Alter und Musiknutzung zusammen?
 
