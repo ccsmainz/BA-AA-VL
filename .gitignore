@@ -6,5 +6,6 @@
 .Ruserdata
 
 /.quarto/
-docs
+/docs/
+/_*
 
